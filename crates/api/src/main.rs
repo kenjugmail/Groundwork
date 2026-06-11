@@ -512,7 +512,18 @@ async fn alerts(
 }
 
 /// Atom 1.0 feed: subscribable from any feed reader, zero infrastructure.
-async fn alerts_atom(State(st): State<AppState>) -> Result<Response, ApiError> {
+/// Links are absolute (derived from the request Host) so entries work
+/// outside the origin.
+async fn alerts_atom(
+    State(st): State<AppState>,
+    headers: axum::http::HeaderMap,
+) -> Result<Response, ApiError> {
+    let host = headers
+        .get(axum::http::header::HOST)
+        .and_then(|h| h.to_str().ok())
+        .unwrap_or("localhost:8080");
+    let scheme = if host.starts_with("localhost") || host.starts_with("127.") { "http" } else { "https" };
+    let base = format!("{scheme}://{host}");
     let q = AlertsQuery { since: None, severity: None, alert_type: None, limit: Some(50) };
     let alerts = fetch_alerts(&st.db, &q).await?;
     let updated = alerts
@@ -529,7 +540,7 @@ async fn alerts_atom(State(st): State<AppState>) -> Result<Response, ApiError> {
     <title>{sev}: {ty} — {name}</title>
     <updated>{ts}</updated>
     <content type="text">{sentence}</content>
-    <link href="/v1/alerts"/>
+    <link href="{base}/v1/alerts"/>
   </entry>
 "#,
                 id = a["id"].as_str().unwrap_or(""),
@@ -547,6 +558,7 @@ async fn alerts_atom(State(st): State<AppState>) -> Result<Response, ApiError> {
   <title>Groundwork alerts — widening gaps and blind spots</title>
   <id>urn:groundwork:alerts</id>
   <updated>{updated}</updated>
+  <link rel="self" href="{base}/v1/alerts.atom"/>
   <subtitle>A nowcast is a signal, not proof. Data CC-BY-4.0.</subtitle>
 {entries}</feed>
 "#

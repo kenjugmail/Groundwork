@@ -161,8 +161,25 @@ map.on('load', () => { clearTimeout(basemapFallback); init(); });
 // ---------- data ----------
 async function fetchNowcast() {
   if (!state.nowcastFC) {
-    const res = await fetch('/v1/nowcast?geometry=centroid');
-    state.nowcastFC = await res.json();
+    // Free-tier hosting spins down when idle; the first request can take up
+    // to a minute while the service wakes. Retry with feedback instead of
+    // showing a blank map.
+    for (let attempt = 1; attempt <= 4; attempt++) {
+      try {
+        setLoading(attempt === 1 ? 'Loading nowcast…' : `Waking the server (attempt ${attempt})…`);
+        const res = await fetch('/v1/nowcast?geometry=centroid');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        state.nowcastFC = await res.json();
+        setLoading('');
+        break;
+      } catch (e) {
+        if (attempt === 4) {
+          setLoading('Could not reach the server — refresh to retry.');
+          throw e;
+        }
+        await new Promise((r) => setTimeout(r, attempt * 5000));
+      }
+    }
   }
   return state.nowcastFC;
 }
