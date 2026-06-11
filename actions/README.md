@@ -19,4 +19,17 @@ This does NOT soften commitment #3 (*we inform, we do not allocate*):
 - **Get-help links come first.** The register exists for people in need
   first, donors second.
 
-URLs verified live 2026-06-11.
+## The "systemic" tier
+
+`kind: "systemic"` entries are the big levers — interventions with published
+evidence of changing a need category at scale (Housing First / Built for Zero
+for homelessness, SNAP and the expanded Child Tax Credit for hunger and child
+poverty, GiveWell-vetted programs globally). Criteria are stricter than the
+other tiers: the entry's `note` must state the evidence claim, and the claim
+must be attributable to published research or program data. Groundwork still
+allocates nothing and ranks nothing — "eradicating" a need is policy and
+sustained local work; these links point at the organizations doing that work
+measurably.
+
+URLs verified live 2026-06-11 (endhomelessness.org blocks bots; verified in
+a browser).

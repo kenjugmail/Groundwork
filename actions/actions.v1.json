@@ -155,6 +155,51 @@
       "note": "Unconditional cash transfers with published evidence base."
     },
     {
+      "id": "built_for_zero",
+      "org": "Community Solutions",
+      "title": "Built for Zero — end homelessness measurably",
+      "url": "https://community.solutions/",
+      "kind": "systemic",
+      "counties": ["US"],
+      "note": "By-name data + Housing First; participating communities have measurably ended veteran or chronic homelessness. The closest thing to a proven playbook for 'ending' a need category."
+    },
+    {
+      "id": "naeh",
+      "org": "National Alliance to End Homelessness",
+      "title": "Back Housing First policy",
+      "url": "https://endhomelessness.org/",
+      "kind": "systemic",
+      "counties": ["US"],
+      "note": "Housing First has the strongest evidence base for ending chronic homelessness — stable housing first, services after."
+    },
+    {
+      "id": "feeding_america_advocacy",
+      "org": "Feeding America",
+      "title": "Advocate to protect and expand SNAP",
+      "url": "https://www.feedingamerica.org/take-action/advocate",
+      "kind": "systemic",
+      "counties": ["US"],
+      "note": "For every meal a food bank provides, SNAP provides ~nine. Policy is the biggest anti-hunger lever in the US."
+    },
+    {
+      "id": "results_advocacy",
+      "org": "RESULTS",
+      "title": "Train as a volunteer poverty-policy advocate",
+      "url": "https://results.org/",
+      "kind": "systemic",
+      "counties": ["US"],
+      "note": "Grassroots advocacy on EITC/CTC and global nutrition — policies with measured poverty effects (the 2021 expanded CTC roughly halved US child poverty while active)."
+    },
+    {
+      "id": "givewell",
+      "org": "GiveWell",
+      "title": "Give where the evidence says it goes furthest",
+      "url": "https://www.givewell.org/",
+      "kind": "systemic",
+      "counties": ["*"],
+      "note": "Independent, transparent cost-effectiveness research on global-health and poverty charities."
+    },
+    {
       "id": "fao",
       "org": "UN Food and Agriculture Organization",
       "title": "FAO — global food security data and programmes",

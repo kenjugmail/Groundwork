@@ -14,12 +14,16 @@ pub const CHR_PROVENANCE: &str = "https://www.countyhealthrankings.org/health-da
 pub const CHR_YEAR: i32 = 2025;
 
 /// (human header, our namespaced metric name, is_fraction)
-pub const MEASURES: [(&str, &str, bool); 5] = [
+pub const MEASURES: [(&str, &str, bool); 6] = [
     ("Food Insecurity raw value", "chr_food_insecurity_rate", true),
     ("Children in Poverty raw value", "chr_child_poverty_rate", true),
     ("Unemployment raw value", "chr_unemployment_rate", true),
     ("Uninsured raw value", "chr_uninsured_rate", true),
     ("Median Household Income raw value", "chr_median_household_income", false),
+    // % of households with overcrowding, high cost burden, or inadequate
+    // kitchen/plumbing — the closest national county-level proxy for
+    // housing precarity short of homelessness counts (which are CoC-level).
+    ("Severe Housing Problems raw value", "chr_severe_housing_rate", true),
 ];
 
 #[derive(Debug, Clone)]

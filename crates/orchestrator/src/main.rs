@@ -141,11 +141,28 @@ async fn run_loop(db: &Db, _f: &RecordingFetcher<FsRawStore>) -> anyhow::Result<
 
     let mut handles = Vec::new();
     for src in sources.into_iter().filter(|s| s.enabled) {
+        // CHR is a baseline (not a signal adapter) but still auto-refreshes
+        // on its annual cadence so a long-running deployment stays current.
+        if src.id == "chr" {
+            let cadence = std::time::Duration::from_secs(src.cadence_seconds.max(60) as u64);
+            let db = Db::connect(&database_url).await?;
+            let fetcher = RecordingFetcher::new(FsRawStore::new(&raw_dir));
+            handles.push(tokio::spawn(async move {
+                loop {
+                    match baselines::ingest_chr(&db, &fetcher).await {
+                        Ok(n) => tracing::info!(upserted = n, "chr baseline refresh complete"),
+                        Err(e) => tracing::error!("chr refresh failed: {e:#}"),
+                    }
+                    tokio::time::sleep(cadence).await;
+                }
+            }));
+            continue;
+        }
         let adapter: Option<Box<dyn SourceAdapter>> = match src.id.as_str() {
             "warn_ny" => Some(Box::new(WarnNyAdapter)),
             "household_pulse" => Some(Box::new(HouseholdPulseAdapter::default())),
             "socrata_snap" => Some(Box::new(SocrataSnapAdapter)),
-            _ => None, // baselines are manual/annual; 211 awaits its agreement
+            _ => None, // ACS/MMG are manual or key-gated; 211 awaits its agreement
         };
         let Some(adapter) = adapter else { continue };
         let cadence = std::time::Duration::from_secs(src.cadence_seconds.max(60) as u64);

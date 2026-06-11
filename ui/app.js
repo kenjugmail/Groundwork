@@ -21,6 +21,7 @@ const METRICS = {
   chr_unemployment_rate:        { label: 'Unemployment',           fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.02, '#2c7fb8', 0.05, '#fdae61', 0.08, '#e31a1c', 0.12, '#7f0000'], higherWorse: true },
   chr_uninsured_rate:           { label: 'Uninsured',              fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.05, '#2c7fb8', 0.12, '#fdae61', 0.20, '#e31a1c', 0.30, '#7f0000'], higherWorse: true },
   chr_median_household_income:  { label: 'Median household income', fmt: (v) => '$' + Math.round(v).toLocaleString(), stops: [45000, '#7f0000', 60000, '#e31a1c', 80000, '#fdae61', 110000, '#2c7fb8'], higherWorse: false },
+  chr_severe_housing_rate:      { label: 'Severe housing problems', fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.08, '#2c7fb8', 0.15, '#fdae61', 0.22, '#e31a1c', 0.32, '#7f0000'], higherWorse: true },
 };
 const ELEVATED_PP = 0.002; // delta above baseline (in rate points) we call "elevated"
 
@@ -547,8 +548,8 @@ async function renderActions(geoUnitId, placeName) {
   const el = document.getElementById('actions');
   const res = await fetch(`/v1/actions${geoUnitId ? '?geo_unit_id=' + geoUnitId : ''}`);
   const data = await res.json();
-  const order = { get_help: 0, donate: 1, volunteer: 2 };
-  const label = { get_help: 'Get help', donate: 'Donate', volunteer: 'Volunteer' };
+  const order = { get_help: 0, donate: 1, volunteer: 2, systemic: 3 };
+  const label = { get_help: 'Get help', donate: 'Donate', volunteer: 'Volunteer', systemic: 'Systemic change — the big levers' };
   const groups = {};
   for (const r of data.resources) (groups[r.kind] = groups[r.kind] || []).push(r);
   let html = `<h2>Take action${placeName ? ' — ' + placeName : ''}</h2>`;
@@ -564,3 +565,37 @@ async function renderActions(geoUnitId, placeName) {
 }
 
 renderActions(null, null);
+
+// ---------- live refresh ----------
+// The orchestrator re-ingests sources on their cadences and recomputes the
+// nowcast; the UI re-pulls every 5 minutes so the map tracks it unattended.
+const REFRESH_MS = 5 * 60 * 1000;
+function markLive() {
+  const lastAsOf = state.nowcastFC && state.nowcastFC.features.length
+    ? new Date(Math.max(...state.nowcastFC.features.map((f) => Date.parse(f.properties.as_of)))) : null;
+  document.getElementById('live').innerHTML =
+    `<span class="pulse"></span>live · nowcast as of ${lastAsOf ? lastAsOf.toLocaleTimeString() : '…'}`;
+}
+async function refreshNowcast() {
+  try {
+    const res = await fetch('/v1/nowcast?geometry=centroid');
+    const fc = await res.json();
+    state.nowcastFC = fc;
+    const src = map.getSource('nowcast');
+    if (src) {
+      src.setData({
+        type: 'FeatureCollection',
+        features: fc.features
+          .filter((f) => f.properties.centroid && f.properties.centroid.type)
+          .map((f) => ({ type: 'Feature', geometry: f.properties.centroid, properties: flatProps(f.properties) })),
+      });
+    }
+    if (!['us', 'world'].includes(state.loc)) renderLocalAnalytics();
+    markLive();
+  } catch (e) {
+    console.warn('live refresh failed; will retry', e);
+  }
+}
+setInterval(refreshNowcast, REFRESH_MS);
+// initial badge once first load lands
+const liveBadgeWait = setInterval(() => { if (state.nowcastFC) { markLive(); clearInterval(liveBadgeWait); } }, 1000);
