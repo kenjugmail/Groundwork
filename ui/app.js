@@ -25,10 +25,17 @@ const METRICS = {
 };
 const ELEVATED_PP = 0.002; // delta above baseline (in rate points) we call "elevated"
 
-// Gap-goal constants. Estimates, not invoices — visible here on purpose and
-// PR-able like the fusion weights. Weekly food-budget shortfall per
-// food-insecure person from Feeding America's Map the Meal Gap (~$25/wk).
-const GOAL = { foodShortfallPerPersonYear: 25 * 52 };
+// Gap-goal constant from Feeding America's published Map the Meal Gap
+// research: average weekly food-budget shortfall per food-insecure person,
+// $24.73/week (MMG 2024, reflecting 2022 data — the latest figure FA
+// publishes openly; county-level shortfall dollars are registration-gated).
+// https://map.feedingamerica.org / https://www.feedingamerica.org/research/map-the-meal-gap
+const GOAL = {
+  weeklyShortfall: 24.73,
+  foodShortfallPerPersonYear: 24.73 * 52,
+  sourceUrl: 'https://www.feedingamerica.org/research/map-the-meal-gap',
+  sourceLabel: "Feeding America Map the Meal Gap ($24.73/wk avg shortfall, 2022 data)",
+};
 
 let state = { loc: 'all', view: 'dots', metric: 'chr_food_insecurity_rate', nowcastFC: null, worldData: null, usData: null };
 
@@ -45,6 +52,19 @@ const STATE_NAMES = {
   WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
 };
 const stateName = (s) => STATE_NAMES[s] || s;
+
+// FIPS → USPS for the state dropdown (built without waiting for /v1/us).
+const STATE_FIPS = {
+  '01': 'AL', '02': 'AK', '04': 'AZ', '05': 'AR', '06': 'CA', '08': 'CO', '09': 'CT',
+  '10': 'DE', '11': 'DC', '12': 'FL', '13': 'GA', '15': 'HI', '16': 'ID', '17': 'IL',
+  '18': 'IN', '19': 'IA', '20': 'KS', '21': 'KY', '22': 'LA', '23': 'ME', '24': 'MD',
+  '25': 'MA', '26': 'MI', '27': 'MN', '28': 'MS', '29': 'MO', '30': 'MT', '31': 'NE',
+  '32': 'NV', '33': 'NH', '34': 'NJ', '35': 'NM', '36': 'NY', '37': 'NC', '38': 'ND',
+  '39': 'OH', '40': 'OK', '41': 'OR', '42': 'PA', '44': 'RI', '45': 'SC', '46': 'SD',
+  '47': 'TN', '48': 'TX', '49': 'UT', '50': 'VT', '51': 'VA', '53': 'WA', '54': 'WV',
+  '55': 'WI', '56': 'WY',
+};
+const isStateLoc = (loc) => /^\d{2}$/.test(loc) && loc !== 'us';
 
 // ---------- pledges (device-local, self-reported) ----------
 // Groundwork moves no money and cannot verify donations. Pledges are a
@@ -71,8 +91,8 @@ function goalHtml(key, placeName, foodInsecurePeople) {
   return `
     <h2>Goal — close the food gap in ${placeName}</h2>
     <div style="font-size:12px">≈ <b>${Math.round(foodInsecurePeople).toLocaleString()}</b> food-insecure people ×
-      $${GOAL.foodShortfallPerPersonYear.toLocaleString()}/yr budget shortfall ≈
-      <b>${fmtMoney(need)}/year</b> to fully close (rough estimate — constants in app.js, PR-able).</div>
+      $${GOAL.weeklyShortfall}/week × 52 ≈ <b>${fmtMoney(need)}/year</b> to fully close.
+      Shortfall figure: <a href="${GOAL.sourceUrl}" target="_blank">${GOAL.sourceLabel}</a>.</div>
     <div style="background:#e8ecef;border-radius:6px;height:14px;margin:6px 0;overflow:hidden">
       <div style="background:#2a9d5c;height:100%;width:${Math.max(0.5, 100 * fracDone)}%"></div></div>
     <div style="font-size:11.5px">Your logged giving toward this place: <b>${fmtMoney(given)}</b>
@@ -287,7 +307,19 @@ async function ensureWorldLayer() {
 // ---------- controls ----------
 function buildControls() {
   const sel = document.getElementById('loc');
-  sel.innerHTML = LOCATIONS.map((l) => `<option value="${l.id}">${l.name}</option>`).join('');
+  const states = Object.entries(STATE_FIPS)
+    .map(([fips, abbr]) => ({ fips, name: stateName(abbr) }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((s) => `<option value="${s.fips}">${s.name}</option>`)
+    .join('');
+  sel.innerHTML = `
+    <optgroup label="Sensing metro (live nowcast)">
+      ${LOCATIONS.filter((l) => !['us', 'world'].includes(l.id)).map((l) => `<option value="${l.id}">${l.name}</option>`).join('')}
+    </optgroup>
+    <optgroup label="National & world (annual baseline)">
+      ${LOCATIONS.filter((l) => ['us', 'world'].includes(l.id)).map((l) => `<option value="${l.id}">${l.name}</option>`).join('')}
+    </optgroup>
+    <optgroup label="US states (annual baseline)">${states}</optgroup>`;
   sel.onchange = () => { state.loc = sel.value; renderAll(); };
   const vt = document.getElementById('viewToggle');
   vt.onclick = async () => {
@@ -302,30 +334,51 @@ function buildControls() {
     state.metric = ms.value;
     if (map.getLayer('us-fill')) map.setPaintProperty('us-fill', 'fill-color', usColorExpr(state.metric));
     renderLegend('us');
-    renderUsAnalytics();
+    if (isStateLoc(state.loc)) renderStateAnalytics(state.loc);
+    else renderUsAnalytics();
   };
 }
 
 async function applyVisibility() {
   const world = state.loc === 'world';
-  const us = state.loc === 'us';
+  const usWide = state.loc === 'us';
+  const oneState = isStateLoc(state.loc);
   if (world) await ensureWorldLayer();
-  if (us) await ensureUsLayer();
+  if (usWide || oneState) await ensureUsLayer();
+  if (map.getLayer('us-fill'))
+    map.setFilter('us-fill', oneState ? ['==', ['get', 'state_fips'], state.loc] : null);
   const setVis = (id, on) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
   setVis('world-fill', world);
-  setVis('us-fill', us);
-  setVis('nowcast-dots', !world && !us && state.view === 'dots');
-  setVis('nowcast-fill', !world && !us && state.view === 'choropleth');
-  document.getElementById('metric').style.display = us ? '' : 'none';
-  document.getElementById('viewToggle').style.display = world || us ? 'none' : '';
+  setVis('us-fill', usWide || oneState);
+  setVis('nowcast-dots', !world && !usWide && !oneState && state.view === 'dots');
+  setVis('nowcast-fill', !world && !usWide && !oneState && state.view === 'choropleth');
+  document.getElementById('metric').style.display = usWide || oneState ? '' : 'none';
+  document.getElementById('viewToggle').style.display = world || usWide || oneState ? 'none' : '';
 }
 
 async function renderAll() {
   const loc = LOCATIONS.find((l) => l.id === state.loc);
-  map.fitBounds([[loc.bbox[0], loc.bbox[1]], [loc.bbox[2], loc.bbox[3]]], { padding: 30, duration: 800 });
+  if (loc) {
+    map.fitBounds([[loc.bbox[0], loc.bbox[1]], [loc.bbox[2], loc.bbox[3]]], { padding: 30, duration: 800 });
+  }
   await applyVisibility();
   document.getElementById('detail').innerHTML = '';
-  if (state.loc === 'world') {
+  if (isStateLoc(state.loc)) {
+    renderLegend('us');
+    document.getElementById('modeNote').textContent =
+      `${stateName(STATE_FIPS[state.loc])}: annual county baselines (slow clock). Live tract nowcasting currently runs only in the NYC + Westchester sensing metro — adding a metro means adding its local live sources.`;
+    const us = await fetchUs();
+    const xs = [], ys = [];
+    for (const f of us.features) {
+      if (f.properties.state_fips !== state.loc) continue;
+      const c = centroidOf(f.geometry);
+      if (c) { xs.push(c[0]); ys.push(c[1]); }
+    }
+    if (xs.length)
+      map.fitBounds([[Math.min(...xs), Math.min(...ys)], [Math.max(...xs), Math.max(...ys)]], { padding: 60, duration: 800 });
+    await renderStateAnalytics(state.loc);
+    renderActions('us', stateName(STATE_FIPS[state.loc]));
+  } else if (state.loc === 'world') {
     renderLegend('world');
     document.getElementById('modeNote').textContent =
       'World view is the SLOW clock only: annual FAO/World Bank undernourishment, country resolution. No nowcast — Groundwork has no real-time sources at world scale and does not pretend to.';
@@ -559,73 +612,106 @@ function showUsCounty(p) {
   renderActions(p.geo_unit_id, p.name);
 }
 
-/// State deep-dive: population-weighted aggregates, counts in people, the
-/// state's own worst counties, and a gap goal.
-async function showUsState(fips, stateName) {
+/// Full analytics panel for one state — same depth of treatment as the
+/// sensing-metro view, on slow-clock data: every metric vs the national
+/// county-weighted mean, counts in people, distribution, worst counties,
+/// gap goal, pledge.
+async function renderStateAnalytics(fips) {
   const us = await fetchUs();
+  const name = stateName(STATE_FIPS[fips] || fips);
   const counties = us.features
     .map((f) => f.properties)
     .filter((p) => p.state_fips === fips && p.metrics.chr_population);
-  const stateRow = us.states.find((s) => s.geo_unit_id === fips);
-  const metrics = stateRow ? stateRow.metrics : {};
+  const el = document.getElementById('analytics');
+  if (!counties.length) { el.innerHTML = `<h2>${name}</h2><div>No county data.</div>`; return; }
+  const all = us.features.map((f) => f.properties).filter((p) => p.metrics.chr_population);
+  const wmeanOf = (rows, key) => {
+    const r = rows.filter((c) => typeof c.metrics[key] === 'number');
+    const w = r.reduce((s, c) => s + c.metrics.chr_population, 0);
+    return w ? r.reduce((s, c) => s + c.metrics[key] * c.metrics.chr_population, 0) / w : null;
+  };
   const pop = counties.reduce((s, c) => s + c.metrics.chr_population, 0);
-  const wmean = (key) => {
-    const rows = counties.filter((c) => typeof c.metrics[key] === 'number');
-    const w = rows.reduce((s, c) => s + c.metrics.chr_population, 0);
-    return w ? rows.reduce((s, c) => s + c.metrics[key] * c.metrics.chr_population, 0) / w : null;
-  };
-  const cards = Object.entries(METRICS)
-    .map(([k, m]) => {
-      const v = typeof metrics[k] === 'number' ? metrics[k] : wmean(k);
-      return v == null ? '' : `<div class="stat"><div class="v">${m.fmt(v)}</div><div class="l">${m.label}</div></div>`;
-    })
-    .join('');
-  const ppl = {
-    foodInsecure: (metrics.chr_food_insecurity_rate ?? wmean('chr_food_insecurity_rate')) * pop,
-    unemployed: (metrics.chr_unemployment_rate ?? wmean('chr_unemployment_rate')) * pop,
-    uninsured: (metrics.chr_uninsured_rate ?? wmean('chr_uninsured_rate')) * pop,
-    severeHousing: (metrics.chr_severe_housing_rate ?? wmean('chr_severe_housing_rate')) * pop,
-  };
+  const stateRow = us.states.find((s) => s.geo_unit_id === fips) || { metrics: {} };
+  const valueOf = (k) => (typeof stateRow.metrics[k] === 'number' ? stateRow.metrics[k] : wmeanOf(counties, k));
+
   const m = METRICS[state.metric];
+  const ppl = {
+    foodInsecure: (valueOf('chr_food_insecurity_rate') || 0) * pop,
+    unemployed: (valueOf('chr_unemployment_rate') || 0) * pop,
+    uninsured: (valueOf('chr_uninsured_rate') || 0) * pop,
+    severeHousing: (valueOf('chr_severe_housing_rate') || 0) * pop,
+  };
+
+  // Every metric vs the national county-pop-weighted mean.
+  const vsNational = Object.entries(METRICS).map(([k, mm]) => {
+    const sv = valueOf(k), nv = wmeanOf(all, k);
+    if (sv == null || nv == null) return '';
+    const ratio = sv / nv;
+    const worse = mm.higherWorse ? ratio > 1 : ratio < 1;
+    return `<div class="bar-row"><span class="lbl plain">${mm.label}</span>
+      <div class="bar ${worse ? '' : 'b2'}" style="width:${Math.min(140, 70 * ratio)}px"></div>
+      <span class="val">${mm.fmt(sv)} vs ${mm.fmt(nv)} US (${ratio >= 1 ? '+' : ''}${((ratio - 1) * 100).toFixed(0)}%)</span></div>`;
+  }).join('');
+
   const worst = counties
     .filter((c) => typeof c.metrics[state.metric] === 'number')
     .sort((a, b) => (m.higherWorse ? b.metrics[state.metric] - a.metrics[state.metric] : a.metrics[state.metric] - b.metrics[state.metric]))
-    .slice(0, 5);
+    .slice(0, 10);
   const maxBar = Math.abs(worst[0] ? worst[0].metrics[state.metric] : 1) || 1;
 
-  const detail = document.getElementById('detail');
-  detail.innerHTML = `
-    <h2>${stateName} — state deep dive <span class="worldtag">annual baseline</span></h2>
+  const vals = counties.map((c) => c.metrics[state.metric]).filter((v) => typeof v === 'number');
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const bins = new Array(6).fill(0);
+  for (const v of vals) bins[Math.min(5, Math.floor(((v - lo) / (hi - lo || 1)) * 5.999))]++;
+  const bmax = Math.max(...bins, 1);
+
+  el.innerHTML = `
+    <h2>Analysis — ${name} <span class="worldtag">slow clock</span></h2>
     <div class="statgrid">
       <div class="stat"><div class="v">${cnt(pop)}</div><div class="l">population</div></div>
       <div class="stat"><div class="v">${counties.length}</div><div class="l">counties</div></div>
-      ${cards}
+      <div class="stat"><div class="v">${cnt(ppl.foodInsecure)}</div><div class="l">food-insecure people</div></div>
+      <div class="stat"><div class="v">${cnt(ppl.unemployed)}</div><div class="l">unemployed</div></div>
+      <div class="stat"><div class="v">${cnt(ppl.uninsured)}</div><div class="l">uninsured</div></div>
+      <div class="stat"><div class="v">${cnt(ppl.severeHousing)}</div><div class="l">severe housing</div></div>
     </div>
-    <div class="sig"><b>In people, not percentages</b>:
-      ≈${cnt(ppl.foodInsecure)} food-insecure · ≈${cnt(ppl.unemployed)} unemployed ·
-      ≈${cnt(ppl.uninsured)} uninsured · ≈${cnt(ppl.severeHousing)} in severe housing conditions</div>
-    <div class="chart"><div class="t">Highest-need counties in ${stateName} (${m.label.toLowerCase()}; click)</div>
+    <div class="chart"><div class="t">${name} vs the US, every category (red = worse than national)</div>
+      ${vsNational}</div>
+    <div class="chart"><div class="t">Highest-need counties in ${name} — ${m.label.toLowerCase()} (click)</div>
       ${worst.map((c) => `
         <div class="bar-row"><span class="lbl" data-geo="${c.geo_unit_id}">${c.name}</span>
           <div class="bar" style="width:${(140 * Math.abs(c.metrics[state.metric])) / maxBar}px"></div>
           <span class="val">${m.fmt(c.metrics[state.metric])}</span></div>`).join('')}
     </div>
+    <div class="chart"><div class="t">Distribution across ${counties.length} ${name} counties (${m.label.toLowerCase()})</div>
+      ${bins.map((b, i) => `
+        <div class="bar-row"><span class="lbl plain">${m.fmt(lo + ((hi - lo) * i) / 6)}–${m.fmt(lo + ((hi - lo) * (i + 1)) / 6)}</span>
+          <div class="bar b2" style="width:${(140 * b) / bmax}px"></div><span class="val">${b}</span></div>`).join('')}
+    </div>
     <div class="guidance"><b>Acting on this:</b> state policy is where several of the big levers live —
-      SNAP outreach and school-meal participation are administered state-by-state, and the systemic links
-      below target exactly those. For direct help, the locators work in every county above.</div>
-    <div id="goal">${goalHtml(fips, stateName, ppl.foodInsecure)}</div>`;
-  wireGoal(detail, fips, stateName, ppl.foodInsecure);
-  detail.querySelectorAll('.lbl[data-geo]').forEach((n) => {
+      SNAP outreach and school-meal participation are administered state-by-state (see the systemic links).
+      ${fips === '36' ? 'New York also has the live tract-level nowcast: pick a borough or Westchester in the dropdown.' : ''}</div>
+    <div id="goal">${goalHtml(fips, name, ppl.foodInsecure)}</div>
+    <div class="disclaimer">Source: ${us.source} (<a href="${us.provenance_url}" target="_blank">provenance</a>). People-counts are rate × population estimates.</div>`;
+  wireGoal(el, fips, name, ppl.foodInsecure);
+  el.querySelectorAll('.lbl[data-geo]').forEach((n) => {
     n.onclick = () => {
       const f = us.features.find((x) => x.properties.geo_unit_id === n.dataset.geo);
       if (f) {
         showUsCounty(f.properties);
         const c = centroidOf(f.geometry);
-        if (c) map.flyTo({ center: c, zoom: 7 });
+        if (c) map.flyTo({ center: c, zoom: 7.5 });
       }
     };
   });
-  renderActions('us', stateName);
+}
+
+/// Legacy entry point (state click in US-wide mode): route to the full
+/// state location so the analysis, filter, and zoom all follow.
+async function showUsState(fips, _name) {
+  document.getElementById('loc').value = fips;
+  state.loc = fips;
+  renderAll();
 }
 
 async function renderWorldAnalytics() {
