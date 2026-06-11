@@ -1,0 +1,32 @@
+# Groundwork on Fly.io: `api` serves the public API + map UI;
+# `worker` runs the orchestrator's auto-ingest loop.
+app = "groundwork-civic"
+primary_region = "ewr"   # Newark — closest to the NYC sensing metro
+
+[build]
+  dockerfile = "Dockerfile"
+
+[processes]
+  api = "api"
+  worker = "orchestrator run"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["api"]
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
+[mounts]
+  source = "raw_store"
+  destination = "/data"
+  processes = ["worker"]
+
+[env]
+  RAW_STORE_DIR = "/data"
+  RUST_LOG = "info"

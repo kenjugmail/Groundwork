@@ -50,6 +50,10 @@
     #actions .act.volunteer { border-left: 3px solid #b86f2c; }
     #actions .act.systemic { border-left: 3px solid #5b3fa8; background: #f4f0fb; }
     #live { display: inline-block; font-size: 10.5px; color: #2a7d4f; margin-left: 6px; }
+    #alertsStrip .alert { border-left: 3px solid #e31a1c; background: #fdf0ef; border-radius: 6px;
+      padding: 6px 8px; margin: 4px 0; font-size: 12px; cursor: pointer; }
+    #alertsStrip .alert.warning { border-left-color: #fd8d3c; background: #fef6ee; }
+    #alertsStrip .alert .meta { color: #777; font-size: 10.5px; }
     #live .pulse { display: inline-block; width: 7px; height: 7px; border-radius: 50%;
       background: #2a9d5c; margin-right: 3px; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
@@ -72,6 +76,7 @@
     </div>
     <div class="legend" id="legend"></div>
     <div class="disclaimer" id="modeNote"></div>
+    <div id="alertsStrip"></div>
     <div id="analytics"></div>
     <div id="detail"></div>
     <div id="actions"></div>

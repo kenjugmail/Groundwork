@@ -102,6 +102,12 @@ pub async fn recompute(db: &Db) -> anyhow::Result<usize> {
         .await?;
         written += 1;
     }
+
+    // Alert evaluation rides every recompute; an alert bug must never block
+    // the nowcast itself.
+    if let Err(e) = crate::alerts::evaluate_and_persist(db, as_of).await {
+        tracing::error!("alert evaluation failed: {e:#}");
+    }
     Ok(written)
 }
 

@@ -2,6 +2,7 @@
 //! records every fetch, runs drift gates, writes signals transactionally,
 //! and recomputes the nowcast after ingests.
 
+mod alerts;
 mod baselines;
 mod fetcher;
 mod ingest;

@@ -860,5 +860,34 @@ async function refreshNowcast() {
   }
 }
 setInterval(refreshNowcast, REFRESH_MS);
+
+// Active alerts for the sensing metro: widening gaps and blind spots,
+// clickable through to the tract evidence. Subscribable at /v1/alerts.atom.
+async function renderAlerts() {
+  try {
+    const d = await fetch('/v1/alerts?limit=8').then((r) => r.json());
+    const el = document.getElementById('alertsStrip');
+    if (!d.alerts.length) { el.innerHTML = ''; return; }
+    el.innerHTML = `<h2>Active alerts <a href="/v1/alerts.atom" style="font-size:10px">(subscribe)</a></h2>` +
+      d.alerts.map((a) => `
+        <div class="alert ${a.severity}" data-geo="${a.geo_unit_id}">
+          <b>${a.alert_type.replace('_', ' ')}</b> — ${a.geo_name}
+          ${a.details.delta ? `(+${(100 * a.details.delta).toFixed(2)}pp vs baseline)` : ''}
+          <div class="meta">${a.severity} · ${new Date(a.created_at).toLocaleString()}</div>
+        </div>`).join('');
+    el.querySelectorAll('.alert[data-geo]').forEach((n) => {
+      n.onclick = () => {
+        const f = (state.nowcastFC || { features: [] }).features.find(
+          (x) => x.properties.geo_unit_id === n.dataset.geo);
+        if (f && f.properties.centroid) {
+          map.flyTo({ center: f.properties.centroid.coordinates, zoom: 12 });
+          showTract(flatProps(f.properties));
+        }
+      };
+    });
+  } catch (e) { console.warn('alerts fetch failed', e); }
+}
+renderAlerts();
+setInterval(renderAlerts, REFRESH_MS);
 // initial badge once first load lands
 const liveBadgeWait = setInterval(() => { if (state.nowcastFC) { markLive(); clearInterval(liveBadgeWait); } }, 1000);

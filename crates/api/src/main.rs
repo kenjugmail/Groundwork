@@ -44,6 +44,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/world", get(world_baseline))
         .route("/v1/us", get(us_baseline))
         .route("/v1/alerts", get(alerts))
+        .route("/v1/alerts.atom", get(alerts_atom))
         // Slow clock: separate path, separate cadence label, empty in v0.
         .route("/v1/impact", get(impact_stub))
         .route("/v1/impact/*rest", get(impact_stub))
@@ -405,16 +406,130 @@ async fn actions_for(
 
 #[derive(Deserialize)]
 struct AlertsQuery {
-    #[allow(dead_code)]
     since: Option<DateTime<Utc>>,
+    severity: Option<String>,
+    #[serde(rename = "type")]
+    alert_type: Option<String>,
+    limit: Option<i64>,
 }
 
-async fn alerts(Query(_q): Query<AlertsQuery>) -> impl IntoResponse {
-    Json(serde_json::json!({
-        "alerts": [],
-        "status": "not_implemented_v0",
-        "planned_alert_types": ["widening_gap", "coverage_collapsed"],
+async fn fetch_alerts(
+    db: &Db,
+    q: &AlertsQuery,
+) -> anyhow::Result<Vec<serde_json::Value>> {
+    let rows = sqlx::query(
+        r#"SELECT a.id::text, a.alert_type, a.geo_unit_id, a.severity,
+                  a.as_of, a.created_at, a.details::text AS details,
+                  COALESCE(g.name, a.geo_unit_id) AS geo_name
+           FROM alerts a LEFT JOIN geo_units g ON g.id = a.geo_unit_id
+           WHERE ($1::timestamptz IS NULL OR a.created_at > $1)
+             AND ($2::text IS NULL OR a.severity = $2)
+             AND ($3::text IS NULL OR a.alert_type = $3)
+           ORDER BY a.created_at DESC
+           LIMIT $4"#,
+    )
+    .bind(q.since)
+    .bind(&q.severity)
+    .bind(&q.alert_type)
+    .bind(q.limit.unwrap_or(100).clamp(1, 1000))
+    .fetch_all(&db.pool)
+    .await?;
+    Ok(rows
+        .iter()
+        .map(|r| {
+            serde_json::json!({
+                "id": r.get::<String, _>("id"),
+                "alert_type": r.get::<String, _>("alert_type"),
+                "geo_unit_id": r.get::<String, _>("geo_unit_id"),
+                "geo_name": r.get::<String, _>("geo_name"),
+                "severity": r.get::<String, _>("severity"),
+                "as_of": r.get::<DateTime<Utc>, _>("as_of"),
+                "created_at": r.get::<DateTime<Utc>, _>("created_at"),
+                "details": serde_json::from_str::<serde_json::Value>(&r.get::<String, _>("details")).unwrap_or_default(),
+            })
+        })
+        .collect())
+}
+
+fn alert_sentence(a: &serde_json::Value) -> String {
+    let name = a["geo_name"].as_str().unwrap_or("unknown area");
+    match a["alert_type"].as_str().unwrap_or("") {
+        "widening_gap" => {
+            let d = &a["details"];
+            let because = d["top_contribution"]["signal_type"]
+                .as_str()
+                .map(|t| format!(" — leading contributor: {t} signal"))
+                .unwrap_or_default();
+            format!(
+                "Food-insecurity gap in {name} is {:.1} points above baseline and widening{because}.",
+                d["delta"].as_f64().unwrap_or(0.0) * 100.0
+            )
+        }
+        "coverage_collapsed" => format!(
+            "Sensing coverage collapsed to {:.0}% — the map may be blind, not the need gone.",
+            a["details"]["coverage_score"].as_f64().unwrap_or(0.0) * 100.0
+        ),
+        "gone_blind" => format!(
+            "{name}: high baseline need, high uncertainty, and no live signals — we may be blind here."
+        ),
+        _ => format!("Alert in {name}"),
+    }
+}
+
+async fn alerts(
+    State(st): State<AppState>,
+    Query(q): Query<AlertsQuery>,
+) -> Result<Response, ApiError> {
+    let alerts = fetch_alerts(&st.db, &q).await?;
+    Ok(Json(serde_json::json!({
+        "alerts": alerts,
+        "alert_types": ["widening_gap", "coverage_collapsed", "gone_blind"],
+        "subscribe": { "atom": "/v1/alerts.atom", "webhooks": "see README (webhook_endpoints table)" },
     }))
+    .into_response())
+}
+
+/// Atom 1.0 feed: subscribable from any feed reader, zero infrastructure.
+async fn alerts_atom(State(st): State<AppState>) -> Result<Response, ApiError> {
+    let q = AlertsQuery { since: None, severity: None, alert_type: None, limit: Some(50) };
+    let alerts = fetch_alerts(&st.db, &q).await?;
+    let updated = alerts
+        .first()
+        .and_then(|a| a["created_at"].as_str().map(String::from))
+        .unwrap_or_else(|| Utc::now().to_rfc3339());
+    let esc = |s: &str| s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;");
+    let entries: String = alerts
+        .iter()
+        .map(|a| {
+            format!(
+                r#"  <entry>
+    <id>urn:uuid:{id}</id>
+    <title>{sev}: {ty} — {name}</title>
+    <updated>{ts}</updated>
+    <content type="text">{sentence}</content>
+    <link href="/v1/alerts"/>
+  </entry>
+"#,
+                id = a["id"].as_str().unwrap_or(""),
+                sev = a["severity"].as_str().unwrap_or(""),
+                ty = a["alert_type"].as_str().unwrap_or(""),
+                name = esc(a["geo_name"].as_str().unwrap_or("")),
+                ts = a["created_at"].as_str().unwrap_or(""),
+                sentence = esc(&alert_sentence(a)),
+            )
+        })
+        .collect();
+    let feed = format!(
+        r#"<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Groundwork alerts — widening gaps and blind spots</title>
+  <id>urn:groundwork:alerts</id>
+  <updated>{updated}</updated>
+  <subtitle>A nowcast is a signal, not proof. Data CC-BY-4.0.</subtitle>
+{entries}</feed>
+"#
+    );
+    Ok(([(axum::http::header::CONTENT_TYPE, "application/atom+xml")], feed).into_response())
 }
 
 async fn impact_stub() -> impl IntoResponse {
