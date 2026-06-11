@@ -38,6 +38,7 @@ async fn main() -> anyhow::Result<()> {
         serde_json::from_str(include_str!("../../../actions/actions.v1.json"))?;
 
     let app = Router::new()
+        .route("/healthz", get(healthz))
         .route("/v1/nowcast", get(nowcast))
         .route("/v1/signals/:id", get(signal))
         .route("/v1/actions", get(actions_for))
@@ -64,6 +65,12 @@ async fn main() -> anyhow::Result<()> {
     let listener = tokio::net::TcpListener::bind(&addr).await?;
     axum::serve(listener, app).await?;
     Ok(())
+}
+
+/// Liveness + DB reachability, for hosting health checks.
+async fn healthz(State(st): State<AppState>) -> Result<Response, ApiError> {
+    sqlx::query("SELECT 1").execute(&st.db.pool).await?;
+    Ok(Json(serde_json::json!({"status": "ok"})).into_response())
 }
 
 struct ApiError(anyhow::Error);

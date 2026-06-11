@@ -7,7 +7,7 @@ services:
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /v1/alerts
+    healthCheckPath: /healthz
     envVars:
       - key: DATABASE_URL
         sync: false   # set in the Render dashboard (Neon connection string)

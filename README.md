@@ -82,6 +82,23 @@ cargo run -p api
 - `coverage/` — bias & blind-spot register
 - `ui/` — MapLibre demo of the API
 
+## Deploy your own (free tier)
+
+1. **Database**: create a free [Neon](https://neon.tech) project, run
+   `CREATE EXTENSION postgis;`, and note the connection string.
+2. **Load data**: locally, set `DATABASE_URL` to that string and run the
+   quick-start commands above (migrate, load-tracts, load-us-counties,
+   ingests) — they work identically against the cloud DB.
+3. **API + map**: on [Render](https://render.com), New → Blueprint → this
+   repo ([render.yaml](render.yaml)), set `DATABASE_URL` when prompted.
+4. **Auto-ingest**: add `DATABASE_URL` as a GitHub Actions secret —
+   [.github/workflows/ingest.yml](.github/workflows/ingest.yml) then
+   re-ingests every source on a 6-hour cron and recomputes the nowcast +
+   alerts. Optionally add `ANTHROPIC_API_KEY` to enable the agentic
+   local-news extraction (cents/day at the default 50-article cap).
+5. **Alerts**: subscribe to `/v1/alerts.atom` in any feed reader, or insert
+   a row into `webhook_endpoints` for POST delivery.
+
 ## License
 
 Code: Apache-2.0 ([LICENSE](LICENSE)). Data outputs: CC-BY-4.0 ([DATA_LICENSE](DATA_LICENSE)).

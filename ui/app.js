@@ -229,7 +229,7 @@ async function init() {
     },
   });
   map.on('click', 'nowcast-dots', (e) => showTract(e.features[0].properties));
-  hoverCursor('nowcast-dots');
+  hoverCursor('nowcast-dots', tractTip);
 
   buildControls();
   renderAll();
@@ -252,9 +252,27 @@ function flatProps(p) {
 function deltaColor(prop) {
   return ['interpolate', ['linear'], ['get', prop], 0, '#2c7fb8', 0.005, '#fd8d3c', 0.02, '#e31a1c'];
 }
-function hoverCursor(layer) {
+const hoverPopup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 8 });
+
+function tractTip(p) {
+  const delta = p.nowcast_gap - p.baseline_gap;
+  const tag = delta > 0.01 ? 'widening sharply' : delta > ELEVATED_PP ? 'elevated' : 'at baseline';
+  return `<b>${p.name}</b><br/>nowcast <b>${(100 * p.nowcast_gap).toFixed(1)}%</b> · ${tag}
+    <br/><span style="color:#888;font-size:10px">click for the evidence chain</span>`;
+}
+
+function hoverCursor(layer, tipHtml) {
   map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'));
-  map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
+  map.on('mouseleave', layer, () => {
+    map.getCanvas().style.cursor = '';
+    hoverPopup.remove();
+  });
+  if (tipHtml) {
+    map.on('mousemove', layer, (e) => {
+      const p = e.features[0].properties;
+      hoverPopup.setLngLat(e.lngLat).setHTML(tipHtml(p)).addTo(map);
+    });
+  }
 }
 
 async function ensureChoropleth() {
@@ -279,7 +297,7 @@ async function ensureChoropleth() {
     'nowcast-dots'
   );
   map.on('click', 'nowcast-fill', (e) => showTract(e.features[0].properties));
-  hoverCursor('nowcast-fill');
+  hoverCursor('nowcast-fill', tractTip);
 }
 
 function usColorExpr(metric) {
@@ -305,7 +323,12 @@ async function ensureUsLayer() {
     },
   });
   map.on('click', 'us-fill', (e) => showUsCounty(e.features[0].properties));
-  hoverCursor('us-fill');
+  hoverCursor('us-fill', (p) => {
+    const metrics = typeof p.metrics === 'string' ? JSON.parse(p.metrics) : p.metrics;
+    const m = METRICS[state.metric];
+    const v = metrics[state.metric];
+    return `<b>${p.name}</b><br/>${m.label}: <b>${typeof v === 'number' ? m.fmt(v) : '—'}</b><br/><span style="color:#888;font-size:10px">click for all categories</span>`;
+  });
 }
 
 async function ensureWorldLayer() {
@@ -325,7 +348,8 @@ async function ensureWorldLayer() {
     },
   });
   map.on('click', 'world-fill', (e) => showCountry(e.features[0].properties));
-  hoverCursor('world-fill');
+  hoverCursor('world-fill', (p) =>
+    `<b>${p.name}</b><br/>undernourished: <b>${Number(p.undernourishment_pct).toFixed(1)}%</b> (${p.year})`);
 }
 
 // ---------- controls ----------
