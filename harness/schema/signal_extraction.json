@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExtractedSignals",
+  "description": "Output contract for the extraction agent: zero or more typed signals grounded in the source document. Empty array is valid and common.",
+  "type": "object",
+  "required": ["signals"],
+  "additionalProperties": false,
+  "properties": {
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "signal_type",
+          "direction",
+          "magnitude",
+          "raw_excerpt",
+          "geo_text",
+          "confidence"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "signal_type": {
+            "enum": [
+              "layoff_warn",
+              "pantry_capacity",
+              "survey_food_insufficiency",
+              "snap_enrollment_change"
+            ]
+          },
+          "direction": {
+            "enum": [1, -1],
+            "description": "+1 = need rising / supply falling; -1 = the reverse"
+          },
+          "magnitude": {
+            "type": "number",
+            "minimum": 0,
+            "description": "Quantity stated IN THE TEXT (workers affected, days/week cut). Never inferred."
+          },
+          "raw_excerpt": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Verbatim span from the document that justifies this signal. If no quotable span exists, do not emit the signal."
+          },
+          "geo_text": {
+            "type": "string",
+            "description": "Place name as written in the document (e.g. 'Mount Vernon'). Geo-resolution to tract happens downstream, not in the agent."
+          },
+          "observed_date_text": {
+            "type": ["string", "null"],
+            "description": "Date as written in the document, if any."
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1408 @@
+[
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-06T12:00:00Z",
+    "magnitude": 42.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 42.0,
+      "company": "420 Park FB LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "420 Park FB LLC — Closure, 42 affected workers, New York County, WARN notice dated 2026-04-06",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:420 Park FB LLC:36061:2026-04-06"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36003",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-05-08T12:00:00Z",
+    "magnitude": 45.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 45.0,
+      "company": "AVI Foodsystems, Inc.",
+      "county": "Allegany",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "AVI Foodsystems, Inc. — Closure, 45 affected workers, Allegany County, WARN notice dated 2026-05-08",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:AVI Foodsystems, Inc.:36003:2026-05-08"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36047",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-05-04T12:00:00Z",
+    "magnitude": 16.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 16.0,
+      "company": "Air Company Holdings Inc.",
+      "county": "Kings",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Air Company Holdings Inc. — Closure, 16 affected workers, Kings County, WARN notice dated 2026-05-04",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Air Company Holdings Inc.:36047:2026-05-04"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36059",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-27T12:00:00Z",
+    "magnitude": 71.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 71.0,
+      "company": "Amazon (Long Island)",
+      "county": "Nassau",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Amazon (Long Island) — Closure, 71 affected workers, Nassau County, WARN notice dated 2026-01-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Amazon (Long Island):36059:2026-01-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36103",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-27T12:00:00Z",
+    "magnitude": 44.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 44.0,
+      "company": "Amazon (Long Island)",
+      "county": "Suffolk",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Amazon (Long Island) — Closure, 44 affected workers, Suffolk County, WARN notice dated 2026-01-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Amazon (Long Island):36103:2026-01-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36029",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-27T12:00:00Z",
+    "magnitude": 542.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 542.0,
+      "company": "Amazon (Western)",
+      "county": "Erie",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Amazon (Western) — Closure, 542 affected workers, Erie County, WARN notice dated 2026-02-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Amazon (Western):36029:2026-02-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-28T12:00:00Z",
+    "magnitude": 135.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 135.0,
+      "company": "Amazon",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Amazon — Layoff, 135 affected workers, New York County, WARN notice dated 2026-01-28",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Amazon:36061:2026-01-28"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-29T12:00:00Z",
+    "magnitude": 49.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 49.0,
+      "company": "BMC Benchmark Management Company, LLC. (Edith Macy Center Hotel)",
+      "county": "Westchester",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "BMC Benchmark Management Company, LLC. (Edith Macy Center Hotel) — Closure, 49 affected workers, Westchester County, WARN notice dated 2026-01-29",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:BMC Benchmark Management Company, LLC. (Edith Macy Center Hotel):36119:2026-01-29"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36029",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-19T12:00:00Z",
+    "magnitude": 170.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 170.0,
+      "company": "Bank of America",
+      "county": "Erie",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Bank of America — Closure, 170 affected workers, Erie County, WARN notice dated 2026-03-19",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Bank of America:36029:2026-03-19"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36005",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-05-27T12:00:00Z",
+    "magnitude": 44.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 44.0,
+      "company": "Bronx Parent Housing Network",
+      "county": "Bronx",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Bronx Parent Housing Network — Layoff, 44 affected workers, Bronx County, WARN notice dated 2026-05-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Bronx Parent Housing Network:36005:2026-05-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36001",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 1.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 1.0,
+      "company": "Cayuga Home for Children",
+      "county": "Albany",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Cayuga Home for Children — Closure, 1 affected workers, Albany County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Cayuga Home for Children:36001:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36011",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 14.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 14.0,
+      "company": "Cayuga Home for Children",
+      "county": "Cayuga",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Cayuga Home for Children — Closure, 14 affected workers, Cayuga County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Cayuga Home for Children:36011:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 319.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 319.0,
+      "company": "Cayuga Home for Children",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Cayuga Home for Children — Closure, 319 affected workers, New York County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Cayuga Home for Children:36061:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36065",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 1.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 1.0,
+      "company": "Cayuga Home for Children",
+      "county": "Oneida",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Cayuga Home for Children — Closure, 1 affected workers, Oneida County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Cayuga Home for Children:36065:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-14T12:00:00Z",
+    "magnitude": 552.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 552.0,
+      "company": "Citibank, N.A.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Citibank, N.A. — Layoff, 552 affected workers, New York County, WARN notice dated 2026-01-14",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Citibank, N.A.:36061:2026-01-14"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-14T12:00:00Z",
+    "magnitude": 46.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 46.0,
+      "company": "Citigroup Global Markets, Inc.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Citigroup Global Markets, Inc. — Layoff, 46 affected workers, New York County, WARN notice dated 2026-01-14",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Citigroup Global Markets, Inc.:36061:2026-01-14"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-14T12:00:00Z",
+    "magnitude": 2.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 2.0,
+      "company": "Citigroup Technology, Inc.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Citigroup Technology, Inc. — Layoff, 2 affected workers, New York County, WARN notice dated 2026-01-14",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Citigroup Technology, Inc.:36061:2026-01-14"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36025",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 53.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 53.0,
+      "company": "College Association at Delhi, Inc.- SUNY Delhi",
+      "county": "Delaware",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "College Association at Delhi, Inc.- SUNY Delhi — Layoff, 53 affected workers, Delaware County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:College Association at Delhi, Inc.- SUNY Delhi:36025:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-02T12:00:00Z",
+    "magnitude": 13.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 13.0,
+      "company": "DF NY One Inc. d/b/a Dreamfields",
+      "county": "Westchester",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "DF NY One Inc. d/b/a Dreamfields — Layoff, 13 affected workers, Westchester County, WARN notice dated 2026-03-02",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:DF NY One Inc. d/b/a Dreamfields:36119:2026-03-02"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-17T12:00:00Z",
+    "magnitude": 37.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 37.0,
+      "company": "Dice Lion Technology LLC",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Dice Lion Technology LLC — Layoff, 37 affected workers, New York County, WARN notice dated 2026-03-17",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Dice Lion Technology LLC:36061:2026-03-17"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36001",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-13T12:00:00Z",
+    "magnitude": 78.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 78.0,
+      "company": "Durham School Services, LP./Monroe School Transportation, Inc.",
+      "county": "Albany",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Durham School Services, LP./Monroe School Transportation, Inc. — Closure, 78 affected workers, Albany County, WARN notice dated 2026-04-13",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Durham School Services, LP./Monroe School Transportation, Inc.:36001:2026-04-13"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36055",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-21T12:00:00Z",
+    "magnitude": 180.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 180.0,
+      "company": "Durham School Services, LP./Monroe School Transportation, Inc.",
+      "county": "Monroe",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Durham School Services, LP./Monroe School Transportation, Inc. — Closure, 180 affected workers, Monroe County, WARN notice dated 2026-04-21",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Durham School Services, LP./Monroe School Transportation, Inc.:36055:2026-04-21"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36087",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-27T12:00:00Z",
+    "magnitude": 99.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 99.0,
+      "company": "Elevate NY, LLC.",
+      "county": "Rockland",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Elevate NY, LLC. — Layoff, 99 affected workers, Rockland County, WARN notice dated 2026-01-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Elevate NY, LLC.:36087:2026-01-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-03T12:00:00Z",
+    "magnitude": 13.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 13.0,
+      "company": "Enthuse LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Enthuse LLC — Closure, 13 affected workers, New York County, WARN notice dated 2026-03-03",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Enthuse LLC:36061:2026-03-03"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36113",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-05-05T12:00:00Z",
+    "magnitude": 37.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 37.0,
+      "company": "Etain, LLC.",
+      "county": "Warren",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Etain, LLC. — Closure, 37 affected workers, Warren County, WARN notice dated 2026-05-05",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Etain, LLC.:36113:2026-05-05"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36001",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-13T12:00:00Z",
+    "magnitude": 43.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 43.0,
+      "company": "Federal Express Corporation (Capital Region)",
+      "county": "Albany",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Federal Express Corporation (Capital Region) — Layoff, 43 affected workers, Albany County, WARN notice dated 2026-01-13",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Federal Express Corporation (Capital Region):36001:2026-01-13"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36101",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-25T12:00:00Z",
+    "magnitude": 85.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 85.0,
+      "company": "Finger Lakes On Wheels, LLC.",
+      "county": "Steuben",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Finger Lakes On Wheels, LLC. — Closure, 85 affected workers, Steuben County, WARN notice dated 2026-03-25",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Finger Lakes On Wheels, LLC.:36101:2026-03-25"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36071",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-28T12:00:00Z",
+    "magnitude": 56.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 56.0,
+      "company": "Fresenius USA Manufacturing, Inc.",
+      "county": "Orange",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Fresenius USA Manufacturing, Inc. — Layoff, 56 affected workers, Orange County, WARN notice dated 2026-01-28",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Fresenius USA Manufacturing, Inc.:36071:2026-01-28"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-14T12:00:00Z",
+    "magnitude": 37.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 37.0,
+      "company": "G&L Restaurant LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "G&L Restaurant LLC — Closure, 37 affected workers, New York County, WARN notice dated 2026-04-14",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:G&L Restaurant LLC:36061:2026-04-14"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-13T12:00:00Z",
+    "magnitude": 41.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 41.0,
+      "company": "Glossier, Inc.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Glossier, Inc. — Layoff, 41 affected workers, New York County, WARN notice dated 2026-02-13",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Glossier, Inc.:36061:2026-02-13"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36047",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-15T12:00:00Z",
+    "magnitude": 75.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 75.0,
+      "company": "GoGo Bus Tours Inc .d/b/a 2gobus",
+      "county": "Kings",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "GoGo Bus Tours Inc .d/b/a 2gobus — Layoff, 75 affected workers, Kings County, WARN notice dated 2026-01-15",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:GoGo Bus Tours Inc .d/b/a 2gobus:36047:2026-01-15"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36029",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-27T12:00:00Z",
+    "magnitude": 199.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 199.0,
+      "company": "International Imaging Materials, Inc. (Armor-IIMAK)",
+      "county": "Erie",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "International Imaging Materials, Inc. (Armor-IIMAK) — Closure, 199 affected workers, Erie County, WARN notice dated 2026-04-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:International Imaging Materials, Inc. (Armor-IIMAK):36029:2026-04-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36005",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-27T12:00:00Z",
+    "magnitude": 52.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 52.0,
+      "company": "Krispy Kreme Doughnut Corporation",
+      "county": "Bronx",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Krispy Kreme Doughnut Corporation — Layoff, 52 affected workers, Bronx County, WARN notice dated 2026-01-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Krispy Kreme Doughnut Corporation:36005:2026-01-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36059",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-05T12:00:00Z",
+    "magnitude": 2.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 2.0,
+      "company": "Liberty Dental Plan Corporation",
+      "county": "Nassau",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Liberty Dental Plan Corporation — Layoff, 2 affected workers, Nassau County, WARN notice dated 2026-02-05",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Liberty Dental Plan Corporation:36059:2026-02-05"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-06T12:00:00Z",
+    "magnitude": 123.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 123.0,
+      "company": "Lincoln Hall",
+      "county": "Westchester",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Lincoln Hall — Closure, 123 affected workers, Westchester County, WARN notice dated 2026-01-06",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Lincoln Hall:36119:2026-01-06"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36047",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 20.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 20.0,
+      "company": "Lutheran Social Services of New York",
+      "county": "Kings",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Lutheran Social Services of New York — Closure, 20 affected workers, Kings County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Lutheran Social Services of New York:36047:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36081",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 38.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 38.0,
+      "company": "Lutheran Social Services of New York",
+      "county": "Queens",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Lutheran Social Services of New York — Closure, 38 affected workers, Queens County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Lutheran Social Services of New York:36081:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-13T12:00:00Z",
+    "magnitude": 66.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 66.0,
+      "company": "Main Street Sports Group, LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Main Street Sports Group, LLC — Closure, 66 affected workers, New York County, WARN notice dated 2026-02-13",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Main Street Sports Group, LLC:36061:2026-02-13"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36029",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-10T12:00:00Z",
+    "magnitude": 78.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 78.0,
+      "company": "McKesson",
+      "county": "Erie",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "McKesson — Closure, 78 affected workers, Erie County, WARN notice dated 2026-02-10",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:McKesson:36029:2026-02-10"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-27T12:00:00Z",
+    "magnitude": 28.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 28.0,
+      "company": "Medical Care at Home, P.C.",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Medical Care at Home, P.C. — Closure, 28 affected workers, New York County, WARN notice dated 2026-04-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Medical Care at Home, P.C.:36061:2026-04-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36073",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-10T12:00:00Z",
+    "magnitude": 30.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 30.0,
+      "company": "Mizkan America, Inc.",
+      "county": "Orleans",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Mizkan America, Inc. — Layoff, 30 affected workers, Orleans County, WARN notice dated 2026-02-10",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Mizkan America, Inc.:36073:2026-02-10"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36103",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-25T12:00:00Z",
+    "magnitude": 31.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 31.0,
+      "company": "NHS U.S., LLC.",
+      "county": "Suffolk",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "NHS U.S., LLC. — Layoff, 31 affected workers, Suffolk County, WARN notice dated 2026-03-25",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:NHS U.S., LLC.:36103:2026-03-25"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-11T12:00:00Z",
+    "magnitude": 75.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 75.0,
+      "company": "NY HEAT, LLC. (The Lambs Club)",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "NY HEAT, LLC. (The Lambs Club) — Layoff, 75 affected workers, New York County, WARN notice dated 2026-03-11",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:NY HEAT, LLC. (The Lambs Club):36061:2026-03-11"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-13T12:00:00Z",
+    "magnitude": 46.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 46.0,
+      "company": "Nespresso",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Nespresso — Layoff, 46 affected workers, New York County, WARN notice dated 2026-01-13",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Nespresso:36061:2026-01-13"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-17T12:00:00Z",
+    "magnitude": 7.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 7.0,
+      "company": "NeuLion USA LLC",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "NeuLion USA LLC — Layoff, 7 affected workers, New York County, WARN notice dated 2026-03-17",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:NeuLion USA LLC:36061:2026-03-17"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-17T12:00:00Z",
+    "magnitude": 36.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 36.0,
+      "company": "PT OPCO, LLC d/b/a Pink Taco",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "PT OPCO, LLC d/b/a Pink Taco — Closure, 36 affected workers, New York County, WARN notice dated 2026-02-17",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:PT OPCO, LLC d/b/a Pink Taco:36061:2026-02-17"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36071",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-20T12:00:00Z",
+    "magnitude": 130.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 130.0,
+      "company": "PharmaCann, Inc.",
+      "county": "Orange",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "PharmaCann, Inc. — Closure, 130 affected workers, Orange County, WARN notice dated 2026-03-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:PharmaCann, Inc.:36071:2026-03-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 64.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 64.0,
+      "company": "Pinnacle Managing Co LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Pinnacle Managing Co LLC — Closure, 64 affected workers, New York County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Pinnacle Managing Co LLC:36061:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-24T12:00:00Z",
+    "magnitude": 72.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 72.0,
+      "company": "Recreational Equipment, Inc.",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Recreational Equipment, Inc. — Closure, 72 affected workers, New York County, WARN notice dated 2026-04-24",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Recreational Equipment, Inc.:36061:2026-04-24"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36005",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 68.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 68.0,
+      "company": "Rising Ground Inc.",
+      "county": "Bronx",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Rising Ground Inc. — Layoff, 68 affected workers, Bronx County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Rising Ground Inc.:36005:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36047",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 17.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 17.0,
+      "company": "Rising Ground Inc.",
+      "county": "Kings",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Rising Ground Inc. — Layoff, 17 affected workers, Kings County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Rising Ground Inc.:36047:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 15.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 15.0,
+      "company": "Rising Ground Inc.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Rising Ground Inc. — Layoff, 15 affected workers, New York County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Rising Ground Inc.:36061:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36081",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 43.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 43.0,
+      "company": "Rising Ground Inc.",
+      "county": "Queens",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Rising Ground Inc. — Layoff, 43 affected workers, Queens County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Rising Ground Inc.:36081:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-20T12:00:00Z",
+    "magnitude": 27.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 27.0,
+      "company": "Rising Ground Inc.",
+      "county": "Westchester",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Rising Ground Inc. — Layoff, 27 affected workers, Westchester County, WARN notice dated 2026-02-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Rising Ground Inc.:36119:2026-02-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36007",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-26T12:00:00Z",
+    "magnitude": 3.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 3.0,
+      "company": "SDH Education West, LLC d/b/a Sodexo - Binghamton University",
+      "county": "Broome",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "SDH Education West, LLC d/b/a Sodexo - Binghamton University — Closure, 3 affected workers, Broome County, WARN notice dated 2026-02-26",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:SDH Education West, LLC d/b/a Sodexo - Binghamton University:36007:2026-02-26"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36059",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-30T12:00:00Z",
+    "magnitude": 2.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 2.0,
+      "company": "Saks & Company LLC",
+      "county": "Nassau",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Saks & Company LLC — Closure, 2 affected workers, Nassau County, WARN notice dated 2026-04-30",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Saks & Company LLC:36059:2026-04-30"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-20T12:00:00Z",
+    "magnitude": 24.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 24.0,
+      "company": "Saks & Company LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Saks & Company LLC — Closure, 24 affected workers, New York County, WARN notice dated 2026-04-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Saks & Company LLC:36061:2026-04-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-30T12:00:00Z",
+    "magnitude": 136.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 136.0,
+      "company": "Saks & Company LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Saks & Company LLC — Closure, 136 affected workers, New York County, WARN notice dated 2026-04-30",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Saks & Company LLC:36061:2026-04-30"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-25T12:00:00Z",
+    "magnitude": 62.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 62.0,
+      "company": "Sardi's Enterprises, Ltd.",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Sardi's Enterprises, Ltd. — Closure, 62 affected workers, New York County, WARN notice dated 2026-03-25",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Sardi's Enterprises, Ltd.:36061:2026-03-25"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-23T12:00:00Z",
+    "magnitude": 93.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 93.0,
+      "company": "Seaport Entertainment Management LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Seaport Entertainment Management LLC — Closure, 93 affected workers, New York County, WARN notice dated 2026-02-23",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Seaport Entertainment Management LLC:36061:2026-02-23"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-31T12:00:00Z",
+    "magnitude": 19.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 19.0,
+      "company": "Sparus Holdings, LLC. & Southern Cross, LLC",
+      "county": "Westchester",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Sparus Holdings, LLC. & Southern Cross, LLC — Layoff, 19 affected workers, Westchester County, WARN notice dated 2026-03-31",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Sparus Holdings, LLC. & Southern Cross, LLC:36119:2026-03-31"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-05-02T12:00:00Z",
+    "magnitude": 186.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 186.0,
+      "company": "Spirit Airlines, LLC",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Spirit Airlines, LLC — Closure, 186 affected workers, New York County, WARN notice dated 2026-05-02",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Spirit Airlines, LLC:36061:2026-05-02"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36093",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-12T12:00:00Z",
+    "magnitude": 15.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 15.0,
+      "company": "TL Cannon Management Corp. - Applebee's (Capital)",
+      "county": "Schenectady",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "TL Cannon Management Corp. - Applebee's (Capital) — Closure, 15 affected workers, Schenectady County, WARN notice dated 2026-01-12",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:TL Cannon Management Corp. - Applebee's (Capital):36093:2026-01-12"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36119",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-01T12:00:00Z",
+    "magnitude": 200.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 200.0,
+      "company": "The Children's Village",
+      "county": "Westchester",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "The Children's Village — Closure, 200 affected workers, Westchester County, WARN notice dated 2026-04-01",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:The Children's Village:36119:2026-04-01"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36081",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-02T12:00:00Z",
+    "magnitude": 41.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 41.0,
+      "company": "The Coca-Cola Company",
+      "county": "Queens",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "The Coca-Cola Company — Layoff, 41 affected workers, Queens County, WARN notice dated 2026-03-02",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:The Coca-Cola Company:36081:2026-03-02"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-02T12:00:00Z",
+    "magnitude": 41.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 41.0,
+      "company": "The Rockefeller University Hospital",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "The Rockefeller University Hospital — Layoff, 41 affected workers, New York County, WARN notice dated 2026-03-02",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:The Rockefeller University Hospital:36061:2026-03-02"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-04-02T12:00:00Z",
+    "magnitude": 27.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 27.0,
+      "company": "The Rockefeller University",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "The Rockefeller University — Closure, 27 affected workers, New York County, WARN notice dated 2026-04-02",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:The Rockefeller University:36061:2026-04-02"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36001",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-24T12:00:00Z",
+    "magnitude": 59.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 59.0,
+      "company": "Ultrepet, LLC. d/b/a Evergreen Recycling, LLC.",
+      "county": "Albany",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Ultrepet, LLC. d/b/a Evergreen Recycling, LLC. — Closure, 59 affected workers, Albany County, WARN notice dated 2026-02-24",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Ultrepet, LLC. d/b/a Evergreen Recycling, LLC.:36001:2026-02-24"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-30T12:00:00Z",
+    "magnitude": 59.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 59.0,
+      "company": "Unique Care Ltd",
+      "county": "New York",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Unique Care Ltd — Closure, 59 affected workers, New York County, WARN notice dated 2026-03-30",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Unique Care Ltd:36061:2026-03-30"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36055",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-27T12:00:00Z",
+    "magnitude": 34.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 34.0,
+      "company": "University of Rochester (Children’s Institute, Inc.)",
+      "county": "Monroe",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "University of Rochester (Children’s Institute, Inc.) — Layoff, 34 affected workers, Monroe County, WARN notice dated 2026-03-27",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:University of Rochester (Children’s Institute, Inc.):36055:2026-03-27"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36063",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-24T12:00:00Z",
+    "magnitude": 69.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 69.0,
+      "company": "VanDeMark Chemical Inc.",
+      "county": "Niagara",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "VanDeMark Chemical Inc. — Closure, 69 affected workers, Niagara County, WARN notice dated 2026-02-24",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:VanDeMark Chemical Inc.:36063:2026-02-24"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36001",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-03-06T12:00:00Z",
+    "magnitude": 133.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 133.0,
+      "company": "Villa Mary Immaculate d/b/a St. Peter’s Nursing and Rehabilitation Center (SPNRC)",
+      "county": "Albany",
+      "kind": "Closure"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Villa Mary Immaculate d/b/a St. Peter’s Nursing and Rehabilitation Center (SPNRC) — Closure, 133 affected workers, Albany County, WARN notice dated 2026-03-06",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Villa Mary Immaculate d/b/a St. Peter’s Nursing and Rehabilitation Center (SPNRC):36001:2026-03-06"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-01-20T12:00:00Z",
+    "magnitude": 133.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 133.0,
+      "company": "Vimeo.com Inc.",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "Vimeo.com Inc. — Layoff, 133 affected workers, New York County, WARN notice dated 2026-01-20",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:Vimeo.com Inc.:36061:2026-01-20"
+  },
+  {
+    "source_id": "warn_ny",
+    "geo_unit_id": "36061",
+    "signal_type": "layoff_warn",
+    "observed_at": "2026-02-04T12:00:00Z",
+    "magnitude": 47.0,
+    "direction": 1,
+    "payload": {
+      "affected_workers": 47.0,
+      "company": "WP Company, LLC",
+      "county": "New York",
+      "kind": "Layoff"
+    },
+    "provenance_url": "https://dol.ny.gov/warn-dashboard",
+    "raw_excerpt": "WP Company, LLC — Layoff, 47 affected workers, New York County, WARN notice dated 2026-02-04",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "warn_ny:WP Company, LLC:36061:2026-02-04"
+  }
+]

@@ -1,0 +1,45 @@
+# Groundwork fusion weights — version v1 (additive model).
+# Changing anything here is a PR with a rationale and a replay diff showing
+# how the map moved. See METHODOLOGY.md for per-type rationale.
+
+version = "v1"
+model_version = "additive-v1"
+
+[uncertainty]
+sigma_baseline = 0.015     # Map the Meal Gap county CI, roughly
+k_signal = 0.25            # uncertainty per unit of |signal contribution|
+k_coverage = 0.05          # added when coverage collapses
+
+# weight: how much one normalized unit of this signal moves the gap (in
+#   food-insecurity-rate points, i.e. 0.01 = 1pp).
+# gameability_discount: 1.0 = hard to fake, 0.5 = heavily discounted.
+# half_life_days: recency decay; exp(-ln2 * age / half_life).
+# normalizer: divisor applied to raw magnitude before weighting.
+
+[signal_types.layoff_warn]
+weight = 0.01
+gameability_discount = 0.95
+half_life_days = 90
+# raw magnitude = affected workers; per county, normalized per 1k of a rough
+# county labor base at apportionment time (see fusion::normalize).
+normalizer = 1000.0
+
+[signal_types.survey_food_insufficiency]
+weight = 0.002
+gameability_discount = 1.0
+half_life_days = 45
+# raw magnitude = % of adults reporting food insufficiency (state level).
+normalizer = 10.0
+
+[signal_types.snap_enrollment_change]
+weight = 0.005
+gameability_discount = 0.95
+half_life_days = 120
+# raw magnitude = |month-over-month % change| in borough SNAP recipients.
+normalizer = 5.0
+
+[signal_types.pantry_capacity]
+weight = 0.004
+gameability_discount = 0.5
+half_life_days = 30
+normalizer = 1.0

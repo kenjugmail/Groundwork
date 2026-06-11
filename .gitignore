@@ -1,0 +1,7 @@
+/target
+.env
+/raw_store
+/data
+*.zip
+*.log
+/.claude/scheduled_tasks.lock

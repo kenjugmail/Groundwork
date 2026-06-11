@@ -1,0 +1,17 @@
+Data outputs of Groundwork (nowcasts, signals metadata, GeoJSON feeds) are
+licensed under Creative Commons Attribution 4.0 International (CC-BY-4.0):
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Attribution keeps the provenance chain intact: republishers must credit
+"Groundwork" and link back to the source feed.
+
+IMPORTANT — upstream data licenses are NOT overridden by this file:
+- Census ACS, Household Pulse, TIGER/Line: public domain (US Government work).
+- NY DOL WARN notices: public records.
+- Map the Meal Gap (Feeding America): registration-gated and NOT wholesale
+  redistributable. This repository contains only tiny derived samples for
+  testing. Obtain the full dataset from Feeding America directly.
+- 211 data (when integrated): governed by the data-sharing agreement with the
+  local 211 operator; raw call records are never published.
+
+Code in this repository is licensed separately under Apache-2.0 (see LICENSE).

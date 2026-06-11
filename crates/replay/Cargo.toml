@@ -1,0 +1,16 @@
+[package]
+name = "replay"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+groundwork-types = { path = "../groundwork-types" }
+store = { path = "../store" }
+adapters = { path = "../adapters" }
+tokio = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }

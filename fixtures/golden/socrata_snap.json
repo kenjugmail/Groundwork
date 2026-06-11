@@ -1,0 +1,1028 @@
+[
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-09-01T12:00:00Z",
+    "magnitude": 3.1231444217193376,
+    "direction": -1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2023-09-01",
+      "pct_change": -3.1231444217193376,
+      "recipients": 469876.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients fell in September 2023 (-3.12% vs prior month, 469876 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2023-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-12-01T12:00:00Z",
+    "magnitude": 0.3875490554954924,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2023-12-01",
+      "pct_change": 0.3875490554954924,
+      "recipients": 471697.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in December 2023 (+0.39% vs prior month, 471697 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2023-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-03-01T12:00:00Z",
+    "magnitude": 3.9504173229848822,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2024-03-01",
+      "pct_change": 3.9504173229848822,
+      "recipients": 490331.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in March 2024 (+3.95% vs prior month, 490331 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2024-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-06-01T12:00:00Z",
+    "magnitude": 1.0191075008514656,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2024-06-01",
+      "pct_change": 1.0191075008514656,
+      "recipients": 495328.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in June 2024 (+1.02% vs prior month, 495328 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2024-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-09-01T12:00:00Z",
+    "magnitude": 0.3038390722914917,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2024-09-01",
+      "pct_change": 0.3038390722914917,
+      "recipients": 496833.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in September 2024 (+0.30% vs prior month, 496833 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2024-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-12-01T12:00:00Z",
+    "magnitude": 0.07245895502110367,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2024-12-01",
+      "pct_change": 0.07245895502110367,
+      "recipients": 497193.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in December 2024 (+0.07% vs prior month, 497193 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2024-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-03-01T12:00:00Z",
+    "magnitude": 0.5635638474395255,
+    "direction": -1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2025-03-01",
+      "pct_change": -0.5635638474395255,
+      "recipients": 494391.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients fell in March 2025 (-0.56% vs prior month, 494391 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2025-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-06-01T12:00:00Z",
+    "magnitude": 0.018608752991053638,
+    "direction": 1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2025-06-01",
+      "pct_change": 0.018608752991053638,
+      "recipients": 494483.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients rose in June 2025 (+0.02% vs prior month, 494483 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2025-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-09-01T12:00:00Z",
+    "magnitude": 0.9312756960299949,
+    "direction": -1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2025-09-01",
+      "pct_change": -0.9312756960299949,
+      "recipients": 489878.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients fell in September 2025 (-0.93% vs prior month, 489878 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2025-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-12-01T12:00:00Z",
+    "magnitude": 2.1168535839535556,
+    "direction": -1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2025-12-01",
+      "pct_change": -2.1168535839535556,
+      "recipients": 479508.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients fell in December 2025 (-2.12% vs prior month, 479508 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2025-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36005",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2026-03-01T12:00:00Z",
+    "magnitude": 1.5470023440693377,
+    "direction": -1,
+    "payload": {
+      "borough": "Bronx",
+      "month": "2026-03-01",
+      "pct_change": -1.5470023440693377,
+      "recipients": 472090.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Bronx: SNAP recipients fell in March 2026 (-1.55% vs prior month, 472090 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36005:2026-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-09-01T12:00:00Z",
+    "magnitude": 1.9418483562257782,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2023-09-01",
+      "pct_change": -1.9418483562257782,
+      "recipients": 595111.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in September 2023 (-1.94% vs prior month, 595111 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2023-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-12-01T12:00:00Z",
+    "magnitude": 0.21895075036421777,
+    "direction": 1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2023-12-01",
+      "pct_change": 0.21895075036421777,
+      "recipients": 596414.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients rose in December 2023 (+0.22% vs prior month, 596414 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2023-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-03-01T12:00:00Z",
+    "magnitude": 3.5052832428480887,
+    "direction": 1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2024-03-01",
+      "pct_change": 3.5052832428480887,
+      "recipients": 617320.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients rose in March 2024 (+3.51% vs prior month, 617320 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2024-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-06-01T12:00:00Z",
+    "magnitude": 0.9330655089742759,
+    "direction": 1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2024-06-01",
+      "pct_change": 0.9330655089742759,
+      "recipients": 623080.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients rose in June 2024 (+0.93% vs prior month, 623080 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2024-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-09-01T12:00:00Z",
+    "magnitude": 0.9990691403993066,
+    "direction": 1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2024-09-01",
+      "pct_change": 0.9990691403993066,
+      "recipients": 629305.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients rose in September 2024 (+1.00% vs prior month, 629305 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2024-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-12-01T12:00:00Z",
+    "magnitude": 0.47512732299918164,
+    "direction": 1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2024-12-01",
+      "pct_change": 0.47512732299918164,
+      "recipients": 632295.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients rose in December 2024 (+0.48% vs prior month, 632295 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2024-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-03-01T12:00:00Z",
+    "magnitude": 0.682434623079417,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2025-03-01",
+      "pct_change": -0.682434623079417,
+      "recipients": 627980.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in March 2025 (-0.68% vs prior month, 627980 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2025-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-06-01T12:00:00Z",
+    "magnitude": 0.058759833115704325,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2025-06-01",
+      "pct_change": -0.058759833115704325,
+      "recipients": 627611.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in June 2025 (-0.06% vs prior month, 627611 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2025-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-09-01T12:00:00Z",
+    "magnitude": 1.034876699101832,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2025-09-01",
+      "pct_change": -1.034876699101832,
+      "recipients": 621116.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in September 2025 (-1.03% vs prior month, 621116 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2025-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-12-01T12:00:00Z",
+    "magnitude": 2.4119488147141595,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2025-12-01",
+      "pct_change": -2.4119488147141595,
+      "recipients": 606135.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in December 2025 (-2.41% vs prior month, 606135 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2025-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36047",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2026-03-01T12:00:00Z",
+    "magnitude": 1.706220561426085,
+    "direction": -1,
+    "payload": {
+      "borough": "Brooklyn",
+      "month": "2026-03-01",
+      "pct_change": -1.706220561426085,
+      "recipients": 595793.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Brooklyn: SNAP recipients fell in March 2026 (-1.71% vs prior month, 595793 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36047:2026-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-09-01T12:00:00Z",
+    "magnitude": 3.0374048831572455,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2023-09-01",
+      "pct_change": -3.0374048831572455,
+      "recipients": 229621.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in September 2023 (-3.04% vs prior month, 229621 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2023-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-12-01T12:00:00Z",
+    "magnitude": 0.24692863457610584,
+    "direction": 1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2023-12-01",
+      "pct_change": 0.24692863457610584,
+      "recipients": 230188.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients rose in December 2023 (+0.25% vs prior month, 230188 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2023-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-03-01T12:00:00Z",
+    "magnitude": 3.2599440457365283,
+    "direction": 1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2024-03-01",
+      "pct_change": 3.2599440457365283,
+      "recipients": 237692.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients rose in March 2024 (+3.26% vs prior month, 237692 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2024-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-06-01T12:00:00Z",
+    "magnitude": 1.003820069669993,
+    "direction": 1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2024-06-01",
+      "pct_change": 1.003820069669993,
+      "recipients": 240078.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients rose in June 2024 (+1.00% vs prior month, 240078 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2024-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-09-01T12:00:00Z",
+    "magnitude": 0.27241146627346113,
+    "direction": 1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2024-09-01",
+      "pct_change": 0.27241146627346113,
+      "recipients": 240732.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients rose in September 2024 (+0.27% vs prior month, 240732 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2024-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-12-01T12:00:00Z",
+    "magnitude": 0.0556635594769287,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2024-12-01",
+      "pct_change": -0.0556635594769287,
+      "recipients": 240598.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in December 2024 (-0.06% vs prior month, 240598 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2024-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-03-01T12:00:00Z",
+    "magnitude": 0.7955178347284683,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2025-03-01",
+      "pct_change": -0.7955178347284683,
+      "recipients": 238684.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in March 2025 (-0.80% vs prior month, 238684 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2025-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-06-01T12:00:00Z",
+    "magnitude": 0.24216118382463844,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2025-06-01",
+      "pct_change": -0.24216118382463844,
+      "recipients": 238106.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in June 2025 (-0.24% vs prior month, 238106 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2025-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-09-01T12:00:00Z",
+    "magnitude": 1.1759468472025065,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2025-09-01",
+      "pct_change": -1.1759468472025065,
+      "recipients": 235306.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in September 2025 (-1.18% vs prior month, 235306 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2025-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-12-01T12:00:00Z",
+    "magnitude": 2.7202876254749135,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2025-12-01",
+      "pct_change": -2.7202876254749135,
+      "recipients": 228905.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in December 2025 (-2.72% vs prior month, 228905 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2025-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36061",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2026-03-01T12:00:00Z",
+    "magnitude": 2.5674406413140822,
+    "direction": -1,
+    "payload": {
+      "borough": "Manhattan",
+      "month": "2026-03-01",
+      "pct_change": -2.5674406413140822,
+      "recipients": 223028.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Manhattan: SNAP recipients fell in March 2026 (-2.57% vs prior month, 223028 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36061:2026-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-09-01T12:00:00Z",
+    "magnitude": 2.131414045873729,
+    "direction": -1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2023-09-01",
+      "pct_change": -2.131414045873729,
+      "recipients": 331109.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients fell in September 2023 (-2.13% vs prior month, 331109 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2023-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-12-01T12:00:00Z",
+    "magnitude": 1.675581153034197,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2023-12-01",
+      "pct_change": 1.675581153034197,
+      "recipients": 336657.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in December 2023 (+1.68% vs prior month, 336657 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2023-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-03-01T12:00:00Z",
+    "magnitude": 4.063483010898333,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2024-03-01",
+      "pct_change": 4.063483010898333,
+      "recipients": 350337.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in March 2024 (+4.06% vs prior month, 350337 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2024-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-06-01T12:00:00Z",
+    "magnitude": 1.675815000984766,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2024-06-01",
+      "pct_change": 1.675815000984766,
+      "recipients": 356208.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in June 2024 (+1.68% vs prior month, 356208 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2024-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-09-01T12:00:00Z",
+    "magnitude": 1.4828414858734222,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2024-09-01",
+      "pct_change": 1.4828414858734222,
+      "recipients": 361490.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in September 2024 (+1.48% vs prior month, 361490 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2024-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-12-01T12:00:00Z",
+    "magnitude": 0.3114885612326759,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2024-12-01",
+      "pct_change": 0.3114885612326759,
+      "recipients": 362616.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in December 2024 (+0.31% vs prior month, 362616 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2024-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-03-01T12:00:00Z",
+    "magnitude": 0.7627903898338738,
+    "direction": -1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2025-03-01",
+      "pct_change": -0.7627903898338738,
+      "recipients": 359850.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients fell in March 2025 (-0.76% vs prior month, 359850 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2025-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-06-01T12:00:00Z",
+    "magnitude": 0.12449631791024039,
+    "direction": 1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2025-06-01",
+      "pct_change": 0.12449631791024039,
+      "recipients": 360298.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients rose in June 2025 (+0.12% vs prior month, 360298 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2025-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-09-01T12:00:00Z",
+    "magnitude": 1.0732782307978397,
+    "direction": -1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2025-09-01",
+      "pct_change": -1.0732782307978397,
+      "recipients": 356431.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients fell in September 2025 (-1.07% vs prior month, 356431 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2025-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-12-01T12:00:00Z",
+    "magnitude": 2.6049922705937476,
+    "direction": -1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2025-12-01",
+      "pct_change": -2.6049922705937476,
+      "recipients": 347146.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients fell in December 2025 (-2.60% vs prior month, 347146 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2025-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36081",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2026-03-01T12:00:00Z",
+    "magnitude": 2.0910510275215612,
+    "direction": -1,
+    "payload": {
+      "borough": "Queens",
+      "month": "2026-03-01",
+      "pct_change": -2.0910510275215612,
+      "recipients": 339887.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Queens: SNAP recipients fell in March 2026 (-2.09% vs prior month, 339887 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36081:2026-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-09-01T12:00:00Z",
+    "magnitude": 1.891236577762383,
+    "direction": -1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2023-09-01",
+      "pct_change": -1.891236577762383,
+      "recipients": 70810.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients fell in September 2023 (-1.89% vs prior month, 70810 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2023-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2023-12-01T12:00:00Z",
+    "magnitude": 0.7908487501765288,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2023-12-01",
+      "pct_change": 0.7908487501765288,
+      "recipients": 71370.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in December 2023 (+0.79% vs prior month, 71370 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2023-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-03-01T12:00:00Z",
+    "magnitude": 3.7817009948157487,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2024-03-01",
+      "pct_change": 3.7817009948157487,
+      "recipients": 74069.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in March 2024 (+3.78% vs prior month, 74069 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2024-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-06-01T12:00:00Z",
+    "magnitude": 1.1367778692840458,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2024-06-01",
+      "pct_change": 1.1367778692840458,
+      "recipients": 74911.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in June 2024 (+1.14% vs prior month, 74911 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2024-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-09-01T12:00:00Z",
+    "magnitude": 0.9998531590821107,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2024-09-01",
+      "pct_change": 0.9998531590821107,
+      "recipients": 75660.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in September 2024 (+1.00% vs prior month, 75660 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2024-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2024-12-01T12:00:00Z",
+    "magnitude": 0.4546656093047846,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2024-12-01",
+      "pct_change": 0.4546656093047846,
+      "recipients": 76004.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in December 2024 (+0.45% vs prior month, 76004 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2024-12-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-03-01T12:00:00Z",
+    "magnitude": 0.49076364401873585,
+    "direction": -1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2025-03-01",
+      "pct_change": -0.49076364401873585,
+      "recipients": 75631.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients fell in March 2025 (-0.49% vs prior month, 75631 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2025-03-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-06-01T12:00:00Z",
+    "magnitude": 0.21419788182094643,
+    "direction": 1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2025-06-01",
+      "pct_change": 0.21419788182094643,
+      "recipients": 75793.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients rose in June 2025 (+0.21% vs prior month, 75793 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2025-06-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-09-01T12:00:00Z",
+    "magnitude": 0.8338500916971225,
+    "direction": -1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2025-09-01",
+      "pct_change": -0.8338500916971225,
+      "recipients": 75161.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients fell in September 2025 (-0.83% vs prior month, 75161 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2025-09-01"
+  },
+  {
+    "source_id": "socrata_snap",
+    "geo_unit_id": "36085",
+    "signal_type": "snap_enrollment_change",
+    "observed_at": "2025-12-01T12:00:00Z",
+    "magnitude": 2.0143425446707734,
+    "direction": -1,
+    "payload": {
+      "borough": "Staten_Island",
+      "month": "2025-12-01",
+      "pct_change": -2.0143425446707734,
+      "recipients": 73647.0
+    },
+    "provenance_url": "https://data.cityofnewyork.us/Social-Services/Cash-Assistance-Medicaid-and-SNAP-Borough-Communit/5awp-wfkt",
+    "raw_excerpt": "Staten_Island: SNAP recipients fell in December 2025 (-2.01% vs prior month, 73647 recipients)",
+    "raw_capture_id": null,
+    "resolution_level": "county",
+    "dedupe_key": "socrata_snap:36085:2025-12-01"
+  }
+]

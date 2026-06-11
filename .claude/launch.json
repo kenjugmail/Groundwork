@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "groundwork-api",
+      "runtimeExecutable": "cargo",
+      "runtimeArgs": ["run", "-p", "api"],
+      "port": 8080
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Groundwork — food insecurity nowcast (NYC + Westchester)</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+    #map { position: absolute; inset: 0; }
+    #panel {
+      position: absolute; top: 12px; left: 12px; z-index: 2;
+      background: rgba(255,255,255,.95); padding: 12px 16px; border-radius: 8px;
+      max-width: 380px; box-shadow: 0 2px 8px rgba(0,0,0,.2); font-size: 13px;
+    }
+    #panel h1 { font-size: 16px; margin: 0 0 4px; }
+    #panel .disclaimer { color: #666; font-size: 11px; margin-top: 6px; }
+    #detail { max-height: 50vh; overflow-y: auto; }
+    .sig { border-top: 1px solid #ddd; padding: 6px 0; }
+    .sig .contrib { font-weight: 600; }
+    .sig a { color: #0a58ca; font-size: 11px; }
+    .legend span { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="panel">
+    <h1>Groundwork nowcast</h1>
+    <div>Food insecurity, NYC + Westchester. Click a tract dot for its evidence chain.</div>
+    <div class="legend" style="margin-top:6px">
+      <span style="background:#2c7fb8"></span>at baseline&nbsp;
+      <span style="background:#fd8d3c"></span>elevated&nbsp;
+      <span style="background:#e31a1c"></span>widening
+    </div>
+    <div class="disclaimer">A nowcast is a signal, not proof. Low coverage ≠ low need
+      (faded dots = low coverage). Data CC-BY-4.0.</div>
+    <div id="detail"></div>
+  </div>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
