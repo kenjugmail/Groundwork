@@ -1,0 +1,37 @@
+# Free-tier replacement for the always-on worker: scheduled ingest runs
+# against the cloud database. Each source still records, gates, dedupes
+# (idempotent), and recomputes the nowcast + alerts.
+name: Scheduled ingest
+on:
+  schedule:
+    - cron: "17 */6 * * *"   # every 6 hours
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      RAW_STORE_DIR: ./raw_store
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release -p orchestrator
+      - name: Ingest structured sources
+        run: |
+          ./target/release/orchestrator ingest warn-ny || echo "warn-ny failed (continuing)"
+          ./target/release/orchestrator ingest socrata-snap || echo "socrata failed (continuing)"
+          ./target/release/orchestrator ingest household-pulse || echo "pulse failed (continuing)"
+      - name: Agentic local-news extraction (skipped if no API key)
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        run: ./target/release/orchestrator ingest local-news || echo "local-news failed (continuing)"
+      - name: Upload raw captures as artifact (record/replay)
+        uses: actions/upload-artifact@v4
+        with:
+          name: raw-captures-${{ github.run_id }}
+          path: raw_store/
+          retention-days: 30
+          if-no-files-found: ignore

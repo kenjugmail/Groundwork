@@ -5,6 +5,7 @@
 mod agentic;
 mod alerts;
 mod baselines;
+mod export;
 mod fetcher;
 mod ingest;
 mod nowcast;
@@ -50,6 +51,14 @@ enum Command {
     },
     /// Recompute the nowcast for every tract.
     Nowcast,
+    /// Write partner-facing sample exports (CSV + GeoJSON) for one county.
+    Export {
+        /// County GEOID, e.g. 36119 (Westchester).
+        #[arg(long, default_value = "36119")]
+        county: String,
+        #[arg(long, default_value = "partners/sample_exports")]
+        out: String,
+    },
     /// Run all enabled sources on their cadences (long-running).
     Run,
 }
@@ -130,6 +139,9 @@ async fn main() -> anyhow::Result<()> {
         Command::Nowcast => {
             let n = nowcast::recompute(&db).await?;
             println!("nowcast recomputed for {n} tracts");
+        }
+        Command::Export { county, out } => {
+            export::export_county(&db, &county, &out).await?;
         }
         Command::Run => run_loop(&db, &fetcher).await?,
     }

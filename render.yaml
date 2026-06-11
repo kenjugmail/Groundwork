@@ -1,0 +1,17 @@
+# Render blueprint: free-tier web service for the Groundwork API + map.
+# The ingest worker runs as a GitHub Actions cron instead (free tiers don't
+# include background workers) — see .github/workflows/ingest.yml.
+services:
+  - type: web
+    name: groundwork
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v1/alerts
+    envVars:
+      - key: DATABASE_URL
+        sync: false   # set in the Render dashboard (Neon connection string)
+      - key: API_ADDR
+        value: 0.0.0.0:8080
+      - key: RUST_LOG
+        value: info
