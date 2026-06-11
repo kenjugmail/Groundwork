@@ -5,3 +5,6 @@
 *.zip
 *.log
 /.claude/scheduled_tasks.lock
+fa_*.html
+fa_*.json
+probe.json
