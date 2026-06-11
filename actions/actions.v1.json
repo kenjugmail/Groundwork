@@ -85,6 +85,42 @@
       "url": "https://211nys.org/",
       "kind": "get_help",
       "counties": ["36005", "36047", "36061", "36081", "36085", "36119"]
+    },
+    {
+      "id": "wfp_donate",
+      "org": "UN World Food Programme",
+      "title": "Donate to the World Food Programme",
+      "url": "https://www.wfp.org/donate",
+      "kind": "donate",
+      "counties": ["*"],
+      "note": "The largest humanitarian food-assistance organization, operating worldwide."
+    },
+    {
+      "id": "action_against_hunger_donate",
+      "org": "Action Against Hunger",
+      "title": "Donate to Action Against Hunger",
+      "url": "https://www.actionagainsthunger.org/take-action/donate/",
+      "kind": "donate",
+      "counties": ["*"],
+      "note": "Hunger treatment and prevention programs in 55+ countries."
+    },
+    {
+      "id": "givedirectly",
+      "org": "GiveDirectly",
+      "title": "Send cash directly to people in extreme poverty",
+      "url": "https://www.givedirectly.org/",
+      "kind": "donate",
+      "counties": ["*"],
+      "note": "Unconditional cash transfers with published evidence base."
+    },
+    {
+      "id": "fao",
+      "org": "UN Food and Agriculture Organization",
+      "title": "FAO — global food security data and programmes",
+      "url": "https://www.fao.org/home/en",
+      "kind": "get_help",
+      "counties": ["*"],
+      "note": "The source institution behind the undernourishment baseline shown on the world map."
     }
   ]
 }

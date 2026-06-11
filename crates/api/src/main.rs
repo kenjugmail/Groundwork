@@ -18,6 +18,8 @@ use uuid::Uuid;
 struct AppState {
     db: Db,
     actions: std::sync::Arc<serde_json::Value>,
+    /// (fetched_at, payload) cache for the World Bank world baseline.
+    world_cache: std::sync::Arc<tokio::sync::Mutex<Option<(std::time::Instant, serde_json::Value)>>>,
 }
 
 #[tokio::main]
@@ -39,13 +41,18 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/nowcast", get(nowcast))
         .route("/v1/signals/:id", get(signal))
         .route("/v1/actions", get(actions_for))
+        .route("/v1/world", get(world_baseline))
         .route("/v1/alerts", get(alerts))
         // Slow clock: separate path, separate cadence label, empty in v0.
         .route("/v1/impact", get(impact_stub))
         .route("/v1/impact/*rest", get(impact_stub))
         .nest_service("/", ServeDir::new("ui"))
         .layer(CorsLayer::permissive())
-        .with_state(AppState { db, actions: std::sync::Arc::new(actions) });
+        .with_state(AppState {
+            db,
+            actions: std::sync::Arc::new(actions),
+            world_cache: std::sync::Arc::new(tokio::sync::Mutex::new(None)),
+        });
 
     let addr = std::env::var("API_ADDR").unwrap_or_else(|_| "127.0.0.1:8080".into());
     println!("Groundwork API on http://{addr}");
@@ -183,6 +190,85 @@ async fn signal(
     }
 }
 
+/// Global slow-baseline layer: prevalence of undernourishment by country
+/// (World Bank SN.ITK.DEFC.ZS, sourced from FAO). This is the SLOW clock at
+/// world scale — an annual baseline with full provenance, never a nowcast.
+/// Groundwork has no fast-clock sources outside its sensing metros, and it
+/// does not pretend otherwise.
+async fn world_baseline(State(st): State<AppState>) -> Result<Response, ApiError> {
+    const WB_URL: &str = "https://api.worldbank.org/v2/country/all/indicator/SN.ITK.DEFC.ZS?format=json&date=2015:2024&per_page=4000";
+    const TTL: std::time::Duration = std::time::Duration::from_secs(24 * 3600);
+
+    let mut cache = st.world_cache.lock().await;
+    if let Some((at, payload)) = cache.as_ref() {
+        if at.elapsed() < TTL {
+            return Ok(Json(payload.clone()).into_response());
+        }
+    }
+
+    let raw: serde_json::Value = reqwest::Client::new()
+        .get(WB_URL)
+        .timeout(std::time::Duration::from_secs(30))
+        .send()
+        .await?
+        .error_for_status()?
+        .json()
+        .await?;
+    let rows = raw
+        .get(1)
+        .and_then(|v| v.as_array())
+        .ok_or_else(|| anyhow::anyhow!("World Bank response shape changed"))?;
+
+    // Latest non-null observation per ISO3 code.
+    let mut latest: std::collections::HashMap<String, (i64, f64, String)> =
+        std::collections::HashMap::new();
+    for r in rows {
+        let (Some(iso3), Some(year), Some(value)) = (
+            r.get("countryiso3code").and_then(|v| v.as_str()),
+            r.get("date").and_then(|v| v.as_str()).and_then(|d| d.parse::<i64>().ok()),
+            r.get("value").and_then(|v| v.as_f64()),
+        ) else {
+            continue;
+        };
+        if iso3.len() != 3 {
+            continue;
+        }
+        let name = r
+            .pointer("/country/value")
+            .and_then(|v| v.as_str())
+            .unwrap_or(iso3)
+            .to_string();
+        let e = latest.entry(iso3.to_string()).or_insert((year, value, name.clone()));
+        if year > e.0 {
+            *e = (year, value, name);
+        }
+    }
+
+    let countries: Vec<serde_json::Value> = latest
+        .into_iter()
+        .map(|(iso3, (year, value, name))| {
+            serde_json::json!({
+                "iso3": iso3,
+                "name": name,
+                "year": year,
+                "undernourishment_pct": value,
+                "provenance_url": format!("https://data.worldbank.org/indicator/SN.ITK.DEFC.ZS?locations={iso3}"),
+            })
+        })
+        .collect();
+
+    let payload = serde_json::json!({
+        "clock": "slow",
+        "metric": "prevalence_of_undernourishment_pct",
+        "source": "World Bank (FAO), indicator SN.ITK.DEFC.ZS",
+        "license": "CC-BY-4.0 (World Bank Open Data)",
+        "note": "Annual country-level baseline. Includes World Bank regional aggregates (e.g. AFE); join against country geometries to drop them. No fast-clock signals exist at world scale in this deployment — this is context, not a nowcast.",
+        "countries": countries,
+    });
+    *cache = Some((std::time::Instant::now(), payload.clone()));
+    Ok(Json(payload).into_response())
+}
+
 #[derive(Deserialize)]
 struct ActionsQuery {
     /// Tract, county, or state GEOID. Omit for the full register.
@@ -196,8 +282,11 @@ async fn actions_for(
     State(st): State<AppState>,
     Query(q): Query<ActionsQuery>,
 ) -> impl IntoResponse {
+    // geo_unit_id: tract/county GEOID, or "world" for the global view.
+    // Resources with counties ["*"] are global and match everywhere; "world"
+    // matches only globals.
     let county: Option<String> = q.geo_unit_id.as_ref().map(|g| {
-        if g.len() >= 5 { g[..5].to_string() } else { g.clone() }
+        if g == "world" { g.clone() } else if g.len() >= 5 { g[..5].to_string() } else { g.clone() }
     });
     let all = st.actions.get("resources").and_then(|r| r.as_array()).cloned().unwrap_or_default();
     let filtered: Vec<serde_json::Value> = match &county {
@@ -207,7 +296,11 @@ async fn actions_for(
             .filter(|r| {
                 r.get("counties")
                     .and_then(|cs| cs.as_array())
-                    .map(|cs| cs.iter().any(|x| x.as_str() == Some(c)))
+                    .map(|cs| {
+                        cs.iter().any(|x| {
+                            x.as_str() == Some("*") || (c != "world" && x.as_str() == Some(c))
+                        })
+                    })
                     .unwrap_or(false)
             })
             .collect(),

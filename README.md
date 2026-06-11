@@ -7,7 +7,10 @@ that map — with its full evidence chain — as open data and an open API.
 
 It does **not** allocate money. It equips the people and funds who do.
 
-**v0 scope:** food insecurity, NYC + Westchester, census-tract resolution.
+**v0 scope:** food insecurity, NYC + Westchester, census-tract resolution —
+plus a world-scale annual context layer (FAO/World Bank undernourishment by
+country), clearly labeled as the slow clock: real-time nowcasting exists only
+where Groundwork has live local sources.
 
 ## Design commitments
 
@@ -59,7 +62,8 @@ cargo run -p api
 |---|---|
 | `GET /v1/nowcast?bbox=minx,miny,maxx,maxy&as_of=...` | GeoJSON FeatureCollection: per-tract `nowcast_gap`, `baseline_gap`, `uncertainty`, `coverage_score`, `news_decomposition[]` |
 | `GET /v1/signals/{id}` | Full signal incl. `raw_excerpt` + `provenance_url` |
-| `GET /v1/actions?geo_unit_id=...` | Curated get-help / donate / volunteer links for that place (no money flows through Groundwork — see [actions/README.md](actions/README.md)) |
+| `GET /v1/actions?geo_unit_id=...` | Curated get-help / donate / volunteer links for that place — local and global (no money flows through Groundwork — see [actions/README.md](actions/README.md)) |
+| `GET /v1/world` | World layer: FAO/World Bank prevalence of undernourishment by country. **Slow clock only** — an annual baseline with provenance, never a nowcast |
 | `GET /v1/alerts?since=...` | Stub in v0 |
 | `GET /v1/impact/...` | Slow-clock impact records (schema only in v0) |
 

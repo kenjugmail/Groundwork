@@ -141,6 +141,7 @@ dependencies = [
  "chrono",
  "dotenvy",
  "groundwork-types",
+ "reqwest",
  "serde",
  "serde_json",
  "sqlx",

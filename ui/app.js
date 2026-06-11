@@ -1,4 +1,21 @@
-// Thin demo of the Groundwork API. All logic is in the API; this just renders.
+// Groundwork demo UI. All analysis here is presentation of API data — the
+// fusion model, weights, and provenance all live server-side.
+
+// ---------- locations ----------
+const LOCATIONS = [
+  { id: 'all',   name: 'NYC + Westchester (all tracts)', bbox: [-74.27, 40.49, -73.45, 41.37] },
+  { id: '36005', name: 'Bronx',          bbox: [-73.94, 40.78, -73.74, 40.92] },
+  { id: '36047', name: 'Brooklyn',       bbox: [-74.05, 40.55, -73.83, 40.74] },
+  { id: '36061', name: 'Manhattan',      bbox: [-74.05, 40.68, -73.90, 40.88] },
+  { id: '36081', name: 'Queens',         bbox: [-73.96, 40.54, -73.70, 40.81] },
+  { id: '36085', name: 'Staten Island',  bbox: [-74.26, 40.49, -74.05, 40.65] },
+  { id: '36119', name: 'Westchester',    bbox: [-73.99, 40.87, -73.48, 41.37] },
+  { id: 'world', name: '🌍 World (annual baseline)', bbox: [-160, -55, 170, 72] },
+];
+const ELEVATED_PP = 0.002; // delta above baseline (in rate points) we call "elevated"
+
+let state = { loc: 'all', view: 'dots', nowcastFC: null, worldData: null, countriesGeo: null };
+
 const map = new maplibregl.Map({
   container: 'map',
   style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json', // © CARTO © OpenStreetMap contributors
@@ -6,8 +23,366 @@ const map = new maplibregl.Map({
   zoom: 9,
 });
 
-// Actionable next steps for a place: get help first, then donate/volunteer.
-// Links go straight to the organizations — Groundwork handles no money.
+// If the basemap CDN stalls, fall back to a blank canvas so the data layers
+// (the actual product) still render.
+const basemapFallback = setTimeout(() => {
+  if (!map.loaded()) {
+    console.warn('basemap stalled; falling back to blank style');
+    map.setStyle({ version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#dfe6ec' } }] });
+    const tryAdd = () => (map.isStyleLoaded() ? init() : setTimeout(tryAdd, 250));
+    tryAdd();
+  }
+}, 10000);
+map.on('load', () => { clearTimeout(basemapFallback); init(); });
+
+// ---------- data ----------
+async function fetchNowcast() {
+  if (!state.nowcastFC) {
+    const res = await fetch('/v1/nowcast?geometry=centroid');
+    state.nowcastFC = await res.json();
+  }
+  return state.nowcastFC;
+}
+async function fetchWorld() {
+  if (!state.worldData) {
+    const [wb, geo] = await Promise.all([
+      fetch('/v1/world').then((r) => r.json()),
+      fetch('data/countries.geo.json').then((r) => r.json()),
+    ]);
+    const byIso = {};
+    for (const c of wb.countries) byIso[c.iso3] = c;
+    for (const f of geo.features) {
+      const d = byIso[f.id];
+      f.properties.iso3 = f.id;
+      f.properties.undernourishment_pct = d ? d.undernourishment_pct : null;
+      f.properties.year = d ? d.year : null;
+      f.properties.provenance_url = d ? d.provenance_url : null;
+    }
+    geo.features = geo.features.filter((f) => f.properties.undernourishment_pct !== null);
+    state.worldData = { wb, geo };
+  }
+  return state.worldData;
+}
+
+// ---------- map layers ----------
+let initialized = false;
+async function init() {
+  if (initialized) return;
+  initialized = true;
+
+  const fc = await fetchNowcast();
+  const dots = {
+    type: 'FeatureCollection',
+    features: fc.features
+      .filter((f) => f.properties.centroid && f.properties.centroid.type)
+      .map((f) => ({
+        type: 'Feature',
+        geometry: f.properties.centroid,
+        properties: flatProps(f.properties),
+      })),
+  };
+  map.addSource('nowcast', { type: 'geojson', data: dots });
+  map.addLayer({
+    id: 'nowcast-dots',
+    type: 'circle',
+    source: 'nowcast',
+    paint: {
+      'circle-radius': ['interpolate', ['linear'], ['get', 'nowcast_gap'], 0, 2.5, 0.12, 5, 0.3, 9],
+      'circle-color': deltaColor('delta'),
+      'circle-opacity': ['interpolate', ['linear'], ['get', 'coverage_score'], 0, 0.25, 1, 0.85],
+      'circle-stroke-width': 0.5,
+      'circle-stroke-color': '#fff',
+    },
+  });
+  map.on('click', 'nowcast-dots', (e) => showTract(e.features[0].properties));
+  hoverCursor('nowcast-dots');
+
+  buildControls();
+  renderAll();
+}
+
+function flatProps(p) {
+  return {
+    geo_unit_id: p.geo_unit_id,
+    name: p.name,
+    nowcast_gap: p.nowcast_gap,
+    baseline_gap: p.baseline_gap,
+    delta: p.nowcast_gap - p.baseline_gap,
+    uncertainty: p.uncertainty,
+    coverage_score: p.coverage_score,
+    news_decomposition: JSON.stringify(p.news_decomposition),
+    as_of: p.as_of,
+    weights_version: p.weights_version,
+  };
+}
+function deltaColor(prop) {
+  return ['interpolate', ['linear'], ['get', prop], 0, '#2c7fb8', 0.005, '#fd8d3c', 0.02, '#e31a1c'];
+}
+function hoverCursor(layer) {
+  map.on('mouseenter', layer, () => (map.getCanvas().style.cursor = 'pointer'));
+  map.on('mouseleave', layer, () => (map.getCanvas().style.cursor = ''));
+}
+
+async function ensureChoropleth() {
+  if (map.getSource('nowcast-poly')) return;
+  // Polygons are heavy; fetched once, on first toggle.
+  const res = await fetch('/v1/nowcast');
+  const fc = await res.json();
+  for (const f of fc.features) f.properties = flatProps(f.properties);
+  map.addSource('nowcast-poly', { type: 'geojson', data: fc });
+  map.addLayer(
+    {
+      id: 'nowcast-fill',
+      type: 'fill',
+      source: 'nowcast-poly',
+      layout: { visibility: 'none' },
+      paint: {
+        'fill-color': deltaColor('delta'),
+        'fill-opacity': ['interpolate', ['linear'], ['get', 'coverage_score'], 0, 0.2, 1, 0.55],
+        'fill-outline-color': '#ffffff',
+      },
+    },
+    'nowcast-dots'
+  );
+  map.on('click', 'nowcast-fill', (e) => showTract(e.features[0].properties));
+  hoverCursor('nowcast-fill');
+}
+
+async function ensureWorldLayer() {
+  if (map.getSource('world')) return;
+  const { geo } = await fetchWorld();
+  map.addSource('world', { type: 'geojson', data: geo });
+  map.addLayer({
+    id: 'world-fill',
+    type: 'fill',
+    source: 'world',
+    layout: { visibility: 'none' },
+    paint: {
+      'fill-color': ['interpolate', ['linear'], ['get', 'undernourishment_pct'],
+        2.5, '#2c7fb8', 10, '#fdae61', 25, '#e31a1c', 50, '#7f0000'],
+      'fill-opacity': 0.65,
+      'fill-outline-color': '#ffffff',
+    },
+  });
+  map.on('click', 'world-fill', (e) => showCountry(e.features[0].properties));
+  hoverCursor('world-fill');
+}
+
+// ---------- controls ----------
+function buildControls() {
+  const sel = document.getElementById('loc');
+  sel.innerHTML = LOCATIONS.map((l) => `<option value="${l.id}">${l.name}</option>`).join('');
+  sel.onchange = () => { state.loc = sel.value; renderAll(); };
+  const vt = document.getElementById('viewToggle');
+  vt.onclick = async () => {
+    state.view = state.view === 'dots' ? 'choropleth' : 'dots';
+    vt.classList.toggle('on', state.view === 'choropleth');
+    if (state.view === 'choropleth') await ensureChoropleth();
+    applyVisibility();
+  };
+}
+
+async function applyVisibility() {
+  const world = state.loc === 'world';
+  if (world) await ensureWorldLayer();
+  const setVis = (id, on) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
+  setVis('world-fill', world);
+  setVis('nowcast-dots', !world && state.view === 'dots');
+  setVis('nowcast-fill', !world && state.view === 'choropleth');
+}
+
+async function renderAll() {
+  const loc = LOCATIONS.find((l) => l.id === state.loc);
+  map.fitBounds([[loc.bbox[0], loc.bbox[1]], [loc.bbox[2], loc.bbox[3]]], { padding: 30, duration: 800 });
+  await applyVisibility();
+  document.getElementById('detail').innerHTML = '';
+  if (state.loc === 'world') {
+    renderLegend(true);
+    document.getElementById('modeNote').textContent =
+      'World view is the SLOW clock only: annual FAO/World Bank undernourishment, country resolution. No nowcast — Groundwork has no real-time sources at world scale and does not pretend to.';
+    await renderWorldAnalytics();
+    renderActions('world', 'World');
+  } else {
+    renderLegend(false);
+    document.getElementById('modeNote').textContent =
+      'Fast clock: tract-level nowcast, recomputed as signals arrive. A nowcast is a signal, not proof. Faded = low coverage, never low need.';
+    await renderLocalAnalytics();
+    renderActions(state.loc === 'all' ? null : state.loc + '000000', loc.name);
+  }
+}
+
+function renderLegend(world) {
+  document.getElementById('legend').innerHTML = world
+    ? `<span style="background:#2c7fb8"></span>&lt;5% <span style="background:#fdae61"></span>10% <span style="background:#e31a1c"></span>25% <span style="background:#7f0000"></span>50%+ undernourished <span class="worldtag">annual baseline</span>`
+    : `<span style="background:#2c7fb8"></span>at baseline <span style="background:#fd8d3c"></span>elevated <span style="background:#e31a1c"></span>widening`;
+}
+
+// ---------- analytics ----------
+function tractsInScope() {
+  const fs = state.nowcastFC.features.map((f) => f.properties);
+  return state.loc === 'all' ? fs : fs.filter((p) => p.geo_unit_id.startsWith(state.loc));
+}
+const pct = (x, d = 1) => (100 * x).toFixed(d) + '%';
+
+async function renderLocalAnalytics() {
+  await fetchNowcast();
+  const t = tractsInScope();
+  const el = document.getElementById('analytics');
+  if (!t.length) { el.innerHTML = '<h2>Analysis</h2><div>No tracts in scope.</div>'; return; }
+
+  const deltas = t.map((p) => p.nowcast_gap - p.baseline_gap);
+  const mean = (a) => a.reduce((s, x) => s + x, 0) / a.length;
+  const elevated = t.filter((p, i) => deltas[i] > ELEVATED_PP);
+  const top = t
+    .map((p) => ({ ...p, delta: p.nowcast_gap - p.baseline_gap }))
+    .sort((a, b) => b.delta - a.delta)
+    .slice(0, 5);
+
+  // Signal-type totals across scope (from each tract's decomposition).
+  const byType = {};
+  for (const p of t)
+    for (const d of p.news_decomposition || [])
+      byType[d.signal_type] = (byType[d.signal_type] || 0) + Math.abs(d.contribution);
+  const typeRows = Object.entries(byType).sort((a, b) => b[1] - a[1]);
+  const typeMax = typeRows[0] ? typeRows[0][1] : 1;
+
+  // Histogram of deltas (6 bins).
+  const dmax = Math.max(...deltas, 0.001);
+  const bins = new Array(6).fill(0);
+  for (const d of deltas) bins[Math.min(5, Math.floor((d / dmax) * 5.999))]++;
+  const bmax = Math.max(...bins, 1);
+
+  el.innerHTML = `
+    <h2>Analysis — ${LOCATIONS.find((l) => l.id === state.loc).name}</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${t.length}</div><div class="l">tracts</div></div>
+      <div class="stat"><div class="v">${pct(mean(t.map((p) => p.nowcast_gap)))}</div><div class="l">mean nowcast gap</div></div>
+      <div class="stat"><div class="v">${elevated.length}</div><div class="l">tracts above baseline</div></div>
+      <div class="stat"><div class="v">${pct(mean(t.map((p) => p.baseline_gap)))}</div><div class="l">mean baseline</div></div>
+      <div class="stat"><div class="v">+${pct(mean(deltas), 2)}</div><div class="l">mean Δ vs baseline</div></div>
+      <div class="stat"><div class="v">${pct(mean(t.map((p) => p.coverage_score)), 0)}</div><div class="l">coverage</div></div>
+    </div>
+    <div class="chart"><div class="t">What's driving the movement (|contribution| by signal type)</div>
+      ${typeRows.map(([k, v]) => `
+        <div class="bar-row"><span class="lbl plain">${k}</span>
+          <div class="bar b2" style="width:${(140 * v) / typeMax}px"></div>
+          <span class="val">${(100 * v).toFixed(1)}pp·tracts</span></div>`).join('') || '<div style="font-size:11px;color:#777">No active signals in scope — nowcast equals baseline everywhere here.</div>'}
+    </div>
+    <div class="chart"><div class="t">Distribution of Δ above baseline (${t.length} tracts)</div>
+      ${bins.map((b, i) => `
+        <div class="bar-row"><span class="lbl plain">${pct((i * dmax) / 6, 2)}–${pct(((i + 1) * dmax) / 6, 2)}</span>
+          <div class="bar b2" style="width:${(140 * b) / bmax}px"></div><span class="val">${b}</span></div>`).join('')}
+    </div>
+    <div class="chart"><div class="t">Most-widening tracts (click to inspect the evidence)</div>
+      ${top.map((p) => `
+        <div class="bar-row"><span class="lbl" data-geo="${p.geo_unit_id}">${p.name} (${p.geo_unit_id.slice(0, 5)})</span>
+          <div class="bar" style="width:${(140 * p.delta) / (top[0].delta || 1)}px"></div>
+          <span class="val">+${pct(p.delta, 2)}</span></div>`).join('')}
+    </div>`;
+
+  el.querySelectorAll('.lbl[data-geo]').forEach((n) => {
+    n.onclick = () => {
+      const p = t.find((x) => x.geo_unit_id === n.dataset.geo);
+      const f = state.nowcastFC.features.find((x) => x.properties.geo_unit_id === n.dataset.geo);
+      if (f && f.properties.centroid) map.flyTo({ center: f.properties.centroid.coordinates, zoom: 12 });
+      showTract(flatProps(p));
+    };
+  });
+}
+
+async function renderWorldAnalytics() {
+  const { wb, geo } = await fetchWorld();
+  const el = document.getElementById('analytics');
+  const joined = geo.features.map((f) => f.properties).sort((a, b) => b.undernourishment_pct - a.undernourishment_pct);
+  const top = joined.slice(0, 10);
+  const max = top[0] ? top[0].undernourishment_pct : 1;
+  const world = wb.countries.find((c) => c.iso3 === 'WLD');
+  el.innerHTML = `
+    <h2>Analysis — World <span class="worldtag">slow clock</span></h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${joined.length}</div><div class="l">countries with data</div></div>
+      <div class="stat"><div class="v">${world ? world.undernourishment_pct.toFixed(1) + '%' : '—'}</div><div class="l">world undernourished (${world ? world.year : ''})</div></div>
+      <div class="stat"><div class="v">${top[0] ? top[0].undernourishment_pct.toFixed(0) + '%' : '—'}</div><div class="l">highest (${top[0] ? top[0].name : ''})</div></div>
+    </div>
+    <div class="chart"><div class="t">Highest prevalence of undernourishment (click to view)</div>
+      ${top.map((c) => `
+        <div class="bar-row"><span class="lbl" data-iso="${c.iso3}">${c.name} (${c.year})</span>
+          <div class="bar" style="width:${(140 * c.undernourishment_pct) / max}px"></div>
+          <span class="val">${c.undernourishment_pct.toFixed(1)}%</span></div>`).join('')}
+    </div>
+    <div class="disclaimer">Source: ${wb.source}. Every value links to its World Bank series. ${wb.license}.</div>`;
+  el.querySelectorAll('.lbl[data-iso]').forEach((n) => {
+    n.onclick = () => {
+      const f = geo.features.find((x) => x.properties.iso3 === n.dataset.iso);
+      if (f) showCountry(f.properties);
+    };
+  });
+}
+
+// ---------- detail views ----------
+async function showTract(p) {
+  const decomposition = typeof p.news_decomposition === 'string' ? JSON.parse(p.news_decomposition || '[]') : (p.news_decomposition || []);
+  const delta = p.nowcast_gap - p.baseline_gap;
+  const detail = document.getElementById('detail');
+  const sev = delta > 0.01 ? 'widening sharply' : delta > ELEVATED_PP ? 'elevated' : 'at baseline';
+  let html = `<h2>${p.name} — ${sev}</h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${pct(p.nowcast_gap)}</div><div class="l">nowcast gap</div></div>
+      <div class="stat"><div class="v">${pct(p.baseline_gap)}</div><div class="l">baseline (MMG+ACS)</div></div>
+      <div class="stat"><div class="v">±${pct(p.uncertainty)}</div><div class="l">uncertainty</div></div>
+    </div>
+    <div style="font-size:11px;color:#666">coverage ${(p.coverage_score * 100).toFixed(0)}% · as of ${new Date(p.as_of).toLocaleString()} · weights ${p.weights_version}</div>`;
+
+  if (delta > ELEVATED_PP) {
+    html += `<div class="guidance"><b>Acting on this:</b> the gap here appears to be widening beyond its baseline.
+      Useful next steps — share the evidence below with a local pantry or food bank serving this county,
+      direct neighbors to the get-help links, or support the county's food bank (links at the bottom).
+      Verify with people who know this place: this is a signal, not proof.</div>`;
+  } else {
+    html += `<div class="guidance">No movement beyond baseline detected here right now. Baseline need still exists —
+      the get-help and donate links below remain relevant year-round.</div>`;
+  }
+
+  if (!decomposition.length) {
+    html += `<div class="sig">No active signals — nowcast equals baseline.</div>`;
+  }
+  for (const d of decomposition) {
+    html += `<div class="sig">
+      <span class="contrib">${d.contribution >= 0 ? '+' : ''}${(100 * d.contribution).toFixed(2)}pp</span>
+      ${d.signal_type} (recency ×${d.recency_factor.toFixed(2)}, gameability ×${d.gameability_discount})
+      <div class="excerpt" data-id="${d.signal_id}">loading evidence…</div>
+      <a href="/v1/signals/${d.signal_id}" target="_blank">full signal + provenance →</a>
+    </div>`;
+  }
+  detail.innerHTML = html;
+  for (const d of decomposition) {
+    fetch(`/v1/signals/${d.signal_id}`)
+      .then((r) => r.json())
+      .then((s) => {
+        const el = detail.querySelector(`.excerpt[data-id="${d.signal_id}"]`);
+        if (el) el.innerHTML = `“${s.raw_excerpt}” — <a href="${s.provenance_url}" target="_blank">source</a>`;
+      })
+      .catch(() => {});
+  }
+  renderActions(p.geo_unit_id, p.name);
+}
+
+function showCountry(p) {
+  document.getElementById('detail').innerHTML = `
+    <h2>${p.name} <span class="worldtag">annual baseline</span></h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${p.undernourishment_pct.toFixed(1)}%</div><div class="l">undernourished (${p.year})</div></div>
+    </div>
+    <div class="sig">FAO/World Bank prevalence of undernourishment — the share of the population whose
+      habitual food consumption is insufficient for a normal, active, healthy life.
+      <br/><a href="${p.provenance_url}" target="_blank">full series + methodology at the World Bank →</a></div>
+    <div class="guidance"><b>Acting on this:</b> country-level data points to where global hunger is concentrated,
+      not what any community needs this week. The organizations below operate at that scale; for local action,
+      their country programmes and the FAO's data are the right starting points.</div>`;
+  renderActions('world', p.name);
+}
+
+// ---------- actions ----------
 async function renderActions(geoUnitId, placeName) {
   const el = document.getElementById('actions');
   const res = await fetch(`/v1/actions${geoUnitId ? '?geo_unit_id=' + geoUnitId : ''}`);
@@ -28,106 +403,4 @@ async function renderActions(geoUnitId, placeName) {
   el.innerHTML = html;
 }
 
-renderActions(null, null); // full register until a tract is picked; no need to wait for the map
-
-// If the basemap CDN stalls, fall back to a blank canvas after 10s so the
-// nowcast layer (the actual product) still renders.
-const basemapFallback = setTimeout(() => {
-  if (!map.loaded()) {
-    console.warn('basemap stalled; falling back to blank style');
-    map.setStyle({ version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#eef0f2' } }] });
-    // setStyle does not re-fire 'load', and 'styledata' can fire before the
-    // style is usable — poll until addLayer is safe.
-    const tryAdd = () => (map.isStyleLoaded() ? addNowcastLayer().catch(console.error) : setTimeout(tryAdd, 250));
-    tryAdd();
-  }
-}, 10000);
-
-map.on('load', () => {
-  clearTimeout(basemapFallback);
-  addNowcastLayer();
-});
-
-async function addNowcastLayer() {
-  if (map.getSource('nowcast')) return;
-  const res = await fetch('/v1/nowcast?geometry=centroid');
-  const fc = await res.json();
-
-  // Render tract centroids as dots (M0 style); polygons stay available in
-  // the same payload for a choropleth later.
-  const dots = {
-    type: 'FeatureCollection',
-    features: fc.features
-      .filter((f) => f.properties.centroid && f.properties.centroid.type)
-      .map((f) => ({
-        type: 'Feature',
-        geometry: f.properties.centroid,
-        properties: {
-          geo_unit_id: f.properties.geo_unit_id,
-          name: f.properties.name,
-          nowcast_gap: f.properties.nowcast_gap,
-          baseline_gap: f.properties.baseline_gap,
-          delta: f.properties.nowcast_gap - f.properties.baseline_gap,
-          uncertainty: f.properties.uncertainty,
-          coverage_score: f.properties.coverage_score,
-          news_decomposition: JSON.stringify(f.properties.news_decomposition),
-          as_of: f.properties.as_of,
-        },
-      })),
-  };
-
-  map.addSource('nowcast', { type: 'geojson', data: dots });
-  map.addLayer({
-    id: 'nowcast-dots',
-    type: 'circle',
-    source: 'nowcast',
-    paint: {
-      'circle-radius': ['interpolate', ['linear'], ['get', 'nowcast_gap'], 0, 2.5, 0.12, 5, 0.3, 9],
-      'circle-color': [
-        'interpolate', ['linear'], ['get', 'delta'],
-        0, '#2c7fb8',
-        0.005, '#fd8d3c',
-        0.02, '#e31a1c',
-      ],
-      // Low coverage reads as faded, never as low need.
-      'circle-opacity': ['interpolate', ['linear'], ['get', 'coverage_score'], 0, 0.25, 1, 0.85],
-      'circle-stroke-width': 0.5,
-      'circle-stroke-color': '#fff',
-    },
-  });
-
-  map.on('click', 'nowcast-dots', async (e) => {
-    const p = e.features[0].properties;
-    const decomposition = JSON.parse(p.news_decomposition || '[]');
-    const detail = document.getElementById('detail');
-    const pct = (x) => (100 * x).toFixed(1) + '%';
-    let html = `<h3 style="margin:10px 0 2px">${p.name}</h3>
-      <div>nowcast <b>${pct(p.nowcast_gap)}</b> vs baseline ${pct(p.baseline_gap)}
-      &nbsp;·&nbsp; ±${pct(p.uncertainty)} &nbsp;·&nbsp; coverage ${(p.coverage_score * 100).toFixed(0)}%</div>`;
-    if (!decomposition.length) {
-      html += `<div class="sig">No active signals — nowcast equals baseline.</div>`;
-    }
-    for (const d of decomposition) {
-      html += `<div class="sig">
-        <span class="contrib">${d.contribution >= 0 ? '+' : ''}${(100 * d.contribution).toFixed(2)}pp</span>
-        ${d.signal_type} (recency ×${d.recency_factor.toFixed(2)}, gameability ×${d.gameability_discount})
-        <div class="excerpt" data-id="${d.signal_id}">loading evidence…</div>
-        <a href="/v1/signals/${d.signal_id}" target="_blank">full signal + provenance →</a>
-      </div>`;
-    }
-    detail.innerHTML = html;
-    renderActions(p.geo_unit_id, p.name);
-    // Click down to the raw evidence: the loop that IS the UX.
-    for (const d of decomposition) {
-      fetch(`/v1/signals/${d.signal_id}`)
-        .then((r) => r.json())
-        .then((s) => {
-          const el = detail.querySelector(`.excerpt[data-id="${d.signal_id}"]`);
-          if (el) el.innerHTML = `“${s.raw_excerpt}” — <a href="${s.provenance_url}" target="_blank">source</a>`;
-        })
-        .catch(() => {});
-    }
-  });
-  map.on('mouseenter', 'nowcast-dots', () => (map.getCanvas().style.cursor = 'pointer'));
-  map.on('mouseleave', 'nowcast-dots', () => (map.getCanvas().style.cursor = ''));
-}
+renderActions(null, null);

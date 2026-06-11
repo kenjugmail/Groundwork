@@ -3,24 +3,44 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Groundwork — food insecurity nowcast (NYC + Westchester)</title>
+  <title>Groundwork — needs transparency map</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <style>
     html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
     #map { position: absolute; inset: 0; }
     #panel {
-      position: absolute; top: 12px; left: 12px; z-index: 2;
-      background: rgba(255,255,255,.95); padding: 12px 16px; border-radius: 8px;
-      max-width: 380px; box-shadow: 0 2px 8px rgba(0,0,0,.2); font-size: 13px;
+      position: absolute; top: 12px; left: 12px; bottom: 12px; z-index: 2;
+      background: rgba(255,255,255,.97); padding: 14px 16px; border-radius: 10px;
+      width: 400px; box-shadow: 0 2px 10px rgba(0,0,0,.25); font-size: 13px;
+      overflow-y: auto;
     }
-    #panel h1 { font-size: 16px; margin: 0 0 4px; }
-    #panel .disclaimer { color: #666; font-size: 11px; margin-top: 6px; }
-    #detail { max-height: 50vh; overflow-y: auto; }
-    .sig { border-top: 1px solid #ddd; padding: 6px 0; }
+    #panel h1 { font-size: 17px; margin: 0 0 2px; }
+    #panel h2 { font-size: 13px; margin: 14px 0 6px; border-top: 1px solid #ddd; padding-top: 10px;
+      text-transform: uppercase; letter-spacing: .04em; color: #444; }
+    .controls { display: flex; gap: 6px; margin: 8px 0; align-items: center; flex-wrap: wrap; }
+    .controls select { flex: 1; padding: 6px 8px; border-radius: 6px; border: 1px solid #bbb; font-size: 13px; }
+    .controls button { padding: 6px 10px; border-radius: 6px; border: 1px solid #bbb; background: #fff;
+      cursor: pointer; font-size: 12px; }
+    .controls button.on { background: #2c7fb8; color: #fff; border-color: #2c7fb8; }
+    .disclaimer { color: #666; font-size: 11px; margin-top: 4px; }
+    .statgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin: 8px 0; }
+    .stat { background: #f4f6f8; border-radius: 8px; padding: 8px; text-align: center; }
+    .stat .v { font-size: 17px; font-weight: 700; }
+    .stat .l { font-size: 10px; color: #555; margin-top: 2px; }
+    .chart { margin: 8px 0; }
+    .chart .t { font-size: 11px; font-weight: 600; color: #444; margin-bottom: 3px; }
+    .bar-row { display: flex; align-items: center; gap: 6px; margin: 2px 0; font-size: 11px; }
+    .bar-row .lbl { width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      cursor: pointer; color: #0a58ca; }
+    .bar-row .lbl.plain { cursor: default; color: #333; }
+    .bar-row .bar { height: 12px; border-radius: 3px; background: #e31a1c; min-width: 2px; }
+    .bar-row .bar.b2 { background: #2c7fb8; }
+    .bar-row .val { color: #555; }
+    .sig { border-top: 1px solid #eee; padding: 6px 0; font-size: 12px; }
     .sig .contrib { font-weight: 600; }
     .sig a { color: #0a58ca; font-size: 11px; }
-    .legend span { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
-    #actions h2 { font-size: 13px; margin: 10px 0 4px; border-top: 1px solid #ddd; padding-top: 8px; }
+    .guidance { background: #fff8e6; border: 1px solid #f0dca0; border-radius: 8px; padding: 8px 10px;
+      font-size: 12px; margin: 8px 0; }
     #actions .act { display: block; margin: 3px 0; padding: 6px 8px; border-radius: 6px;
       text-decoration: none; color: #1a1a1a; background: #f1f3f5; font-size: 12.5px; }
     #actions .act:hover { background: #e2e6ea; }
@@ -29,20 +49,24 @@
     #actions .act.donate { border-left: 3px solid #2a9d5c; }
     #actions .act.volunteer { border-left: 3px solid #b86f2c; }
     #actions .fine { color: #888; font-size: 10.5px; margin-top: 6px; }
+    .legend span { display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+      vertical-align: middle; margin-right: 3px; }
+    .worldtag { display: inline-block; background: #5b3fa8; color: #fff; border-radius: 4px;
+      font-size: 10px; padding: 2px 6px; vertical-align: middle; }
   </style>
 </head>
 <body>
   <div id="map"></div>
   <div id="panel">
-    <h1>Groundwork nowcast</h1>
-    <div>Food insecurity, NYC + Westchester. Click a tract dot for its evidence chain.</div>
-    <div class="legend" style="margin-top:6px">
-      <span style="background:#2c7fb8"></span>at baseline&nbsp;
-      <span style="background:#fd8d3c"></span>elevated&nbsp;
-      <span style="background:#e31a1c"></span>widening
+    <h1>Groundwork</h1>
+    <div style="font-size:12px;color:#444">Where unmet need is moving — with the evidence chain.</div>
+    <div class="controls">
+      <select id="loc"></select>
+      <button id="viewToggle" title="Switch between tract dots and filled polygons">Choropleth</button>
     </div>
-    <div class="disclaimer">A nowcast is a signal, not proof. Low coverage ≠ low need
-      (faded dots = low coverage). Data CC-BY-4.0.</div>
+    <div class="legend" id="legend"></div>
+    <div class="disclaimer" id="modeNote"></div>
+    <div id="analytics"></div>
     <div id="detail"></div>
     <div id="actions"></div>
   </div>
