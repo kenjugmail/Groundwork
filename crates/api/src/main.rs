@@ -17,6 +17,7 @@ use uuid::Uuid;
 #[derive(Clone)]
 struct AppState {
     db: Db,
+    actions: std::sync::Arc<serde_json::Value>,
 }
 
 #[tokio::main]
@@ -29,16 +30,22 @@ async fn main() -> anyhow::Result<()> {
     let db = Db::connect(&database_url).await?;
     db.migrate().await?;
 
+    // Curated action links (donate / volunteer / get help) — a versioned,
+    // PR-able register, like the fusion weights. See actions/README.md.
+    let actions: serde_json::Value =
+        serde_json::from_str(include_str!("../../../actions/actions.v1.json"))?;
+
     let app = Router::new()
         .route("/v1/nowcast", get(nowcast))
         .route("/v1/signals/:id", get(signal))
+        .route("/v1/actions", get(actions_for))
         .route("/v1/alerts", get(alerts))
         // Slow clock: separate path, separate cadence label, empty in v0.
         .route("/v1/impact", get(impact_stub))
         .route("/v1/impact/*rest", get(impact_stub))
         .nest_service("/", ServeDir::new("ui"))
         .layer(CorsLayer::permissive())
-        .with_state(AppState { db });
+        .with_state(AppState { db, actions: std::sync::Arc::new(actions) });
 
     let addr = std::env::var("API_ADDR").unwrap_or_else(|_| "127.0.0.1:8080".into());
     println!("Groundwork API on http://{addr}");
@@ -174,6 +181,43 @@ async fn signal(
         )
             .into_response()),
     }
+}
+
+#[derive(Deserialize)]
+struct ActionsQuery {
+    /// Tract, county, or state GEOID. Omit for the full register.
+    geo_unit_id: Option<String>,
+}
+
+/// Where to get help, donate, or volunteer for a given place. Links go
+/// directly to independent organizations — no money flows through Groundwork,
+/// and order is stable file order, never a ranking.
+async fn actions_for(
+    State(st): State<AppState>,
+    Query(q): Query<ActionsQuery>,
+) -> impl IntoResponse {
+    let county: Option<String> = q.geo_unit_id.as_ref().map(|g| {
+        if g.len() >= 5 { g[..5].to_string() } else { g.clone() }
+    });
+    let all = st.actions.get("resources").and_then(|r| r.as_array()).cloned().unwrap_or_default();
+    let filtered: Vec<serde_json::Value> = match &county {
+        None => all,
+        Some(c) => all
+            .into_iter()
+            .filter(|r| {
+                r.get("counties")
+                    .and_then(|cs| cs.as_array())
+                    .map(|cs| cs.iter().any(|x| x.as_str() == Some(c)))
+                    .unwrap_or(false)
+            })
+            .collect(),
+    };
+    Json(serde_json::json!({
+        "version": st.actions.get("version"),
+        "disclaimer": st.actions.get("disclaimer"),
+        "geo_unit_id": q.geo_unit_id,
+        "resources": filtered,
+    }))
 }
 
 #[derive(Deserialize)]

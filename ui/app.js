@@ -6,7 +6,50 @@ const map = new maplibregl.Map({
   zoom: 9,
 });
 
-map.on('load', async () => {
+// Actionable next steps for a place: get help first, then donate/volunteer.
+// Links go straight to the organizations — Groundwork handles no money.
+async function renderActions(geoUnitId, placeName) {
+  const el = document.getElementById('actions');
+  const res = await fetch(`/v1/actions${geoUnitId ? '?geo_unit_id=' + geoUnitId : ''}`);
+  const data = await res.json();
+  const order = { get_help: 0, donate: 1, volunteer: 2 };
+  const label = { get_help: 'Get help', donate: 'Donate', volunteer: 'Volunteer' };
+  const groups = {};
+  for (const r of data.resources) (groups[r.kind] = groups[r.kind] || []).push(r);
+  let html = `<h2>Take action${placeName ? ' — ' + placeName : ''}</h2>`;
+  for (const kind of Object.keys(groups).sort((a, b) => order[a] - order[b])) {
+    html += `<div style="font-weight:600;font-size:11px;margin-top:6px">${label[kind] || kind}</div>`;
+    for (const r of groups[kind]) {
+      html += `<a class="act ${r.kind}" href="${r.url}" target="_blank" rel="noopener">
+        ${r.title}<div class="org">${r.org}${r.note ? ' — ' + r.note : ''}</div></a>`;
+    }
+  }
+  html += `<div class="fine">${data.disclaimer}</div>`;
+  el.innerHTML = html;
+}
+
+renderActions(null, null); // full register until a tract is picked; no need to wait for the map
+
+// If the basemap CDN stalls, fall back to a blank canvas after 10s so the
+// nowcast layer (the actual product) still renders.
+const basemapFallback = setTimeout(() => {
+  if (!map.loaded()) {
+    console.warn('basemap stalled; falling back to blank style');
+    map.setStyle({ version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#eef0f2' } }] });
+    // setStyle does not re-fire 'load', and 'styledata' can fire before the
+    // style is usable — poll until addLayer is safe.
+    const tryAdd = () => (map.isStyleLoaded() ? addNowcastLayer().catch(console.error) : setTimeout(tryAdd, 250));
+    tryAdd();
+  }
+}, 10000);
+
+map.on('load', () => {
+  clearTimeout(basemapFallback);
+  addNowcastLayer();
+});
+
+async function addNowcastLayer() {
+  if (map.getSource('nowcast')) return;
   const res = await fetch('/v1/nowcast?geometry=centroid');
   const fc = await res.json();
 
@@ -73,6 +116,7 @@ map.on('load', async () => {
       </div>`;
     }
     detail.innerHTML = html;
+    renderActions(p.geo_unit_id, p.name);
     // Click down to the raw evidence: the loop that IS the UX.
     for (const d of decomposition) {
       fetch(`/v1/signals/${d.signal_id}`)
@@ -86,4 +130,4 @@ map.on('load', async () => {
   });
   map.on('mouseenter', 'nowcast-dots', () => (map.getCanvas().style.cursor = 'pointer'));
   map.on('mouseleave', 'nowcast-dots', () => (map.getCanvas().style.cursor = ''));
-});
+}

@@ -1,0 +1,90 @@
+{
+  "version": "v1",
+  "updated": "2026-06-11",
+  "disclaimer": "Groundwork does not handle donations or allocate money. These links go directly to independent organizations. Listing is not endorsement or a ranking; see actions/README.md for the curation policy.",
+  "resources": [
+    {
+      "id": "city_harvest_donate",
+      "org": "City Harvest",
+      "title": "Donate to City Harvest",
+      "url": "https://www.cityharvest.org/donate",
+      "kind": "donate",
+      "counties": ["36005", "36047", "36061", "36081", "36085"],
+      "note": "Food rescue across the five boroughs."
+    },
+    {
+      "id": "city_harvest_volunteer",
+      "org": "City Harvest",
+      "title": "Volunteer with City Harvest",
+      "url": "https://www.cityharvest.org/volunteer/",
+      "kind": "volunteer",
+      "counties": ["36005", "36047", "36061", "36081", "36085"]
+    },
+    {
+      "id": "foodbanknyc_give",
+      "org": "Food Bank For New York City",
+      "title": "Give to Food Bank For NYC",
+      "url": "https://www.foodbanknyc.org/ways-to-give/",
+      "kind": "donate",
+      "counties": ["36005", "36047", "36061", "36081", "36085"],
+      "note": "Citywide network of member pantries and kitchens."
+    },
+    {
+      "id": "feeding_westchester_donate",
+      "org": "Feeding Westchester",
+      "title": "Donate to Feeding Westchester",
+      "url": "https://feedingwestchester.org/donate/",
+      "kind": "donate",
+      "counties": ["36119"],
+      "note": "The county's food bank, supplying ~300 local partners."
+    },
+    {
+      "id": "feeding_westchester_volunteer",
+      "org": "Feeding Westchester",
+      "title": "Volunteer with Feeding Westchester",
+      "url": "https://feedingwestchester.org/volunteer/",
+      "kind": "volunteer",
+      "counties": ["36119"]
+    },
+    {
+      "id": "plentiful",
+      "org": "Plentiful",
+      "title": "Find a food pantry near you (Plentiful)",
+      "url": "https://plentifulapp.com/",
+      "kind": "get_help",
+      "counties": ["36005", "36047", "36061", "36081", "36085", "36119"]
+    },
+    {
+      "id": "hra_food_assistance",
+      "org": "NYC Human Resources Administration",
+      "title": "NYC food assistance programs",
+      "url": "https://www.nyc.gov/site/hra/help/food-assistance.page",
+      "kind": "get_help",
+      "counties": ["36005", "36047", "36061", "36081", "36085"]
+    },
+    {
+      "id": "mybenefits_snap",
+      "org": "New York State OTDA",
+      "title": "Apply for SNAP (myBenefits NY)",
+      "url": "https://mybenefits.ny.gov/",
+      "kind": "get_help",
+      "counties": ["36005", "36047", "36061", "36081", "36085", "36119"]
+    },
+    {
+      "id": "211_hudson_valley",
+      "org": "211 Hudson Valley",
+      "title": "Call 2-1-1 or search Hudson Valley services",
+      "url": "https://www.211hudsonvalley.org/",
+      "kind": "get_help",
+      "counties": ["36119"]
+    },
+    {
+      "id": "211_nys",
+      "org": "211 New York",
+      "title": "Find help through 211 New York",
+      "url": "https://211nys.org/",
+      "kind": "get_help",
+      "counties": ["36005", "36047", "36061", "36081", "36085", "36119"]
+    }
+  ]
+}
