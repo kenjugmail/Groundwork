@@ -9,13 +9,16 @@ COPY crates ./crates
 COPY actions ./actions
 COPY harness ./harness
 COPY fixtures ./fixtures
-RUN cargo build --release -p api -p orchestrator
+# Only the api binary ships in this image: scheduled ingest runs in GitHub
+# Actions (.github/workflows/ingest.yml), so building the orchestrator here
+# would only slow down free-tier deploys.
+RUN cargo build --release -p api
 
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/* \
     && useradd -m groundwork
 WORKDIR /app
-COPY --from=builder /app/target/release/api /app/target/release/orchestrator /usr/local/bin/
+COPY --from=builder /app/target/release/api /usr/local/bin/
 COPY ui ./ui
 COPY fixtures ./fixtures
 COPY actions ./actions
