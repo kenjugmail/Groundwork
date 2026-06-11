@@ -55,6 +55,10 @@ pub struct ApportionedSignal {
     pub observed_at: DateTime<Utc>,
     pub magnitude: f64,
     pub direction: i16,
+    /// Extraction confidence (1.0 for structured sources); multiplies into
+    /// the contribution, explicitly, in the decomposition — never hidden in
+    /// magnitude.
+    pub confidence: f64,
 }
 
 /// Inputs that are about the tract, not the signals.
@@ -88,8 +92,12 @@ pub fn nowcast(
         };
         let recency = recency_factor(s.observed_at, as_of, tw.half_life_days);
         let normalized = s.magnitude / tw.normalizer;
-        let contribution =
-            tw.weight * tw.gameability_discount * recency * normalized * s.direction as f64;
+        let contribution = tw.weight
+            * tw.gameability_discount
+            * recency
+            * s.confidence
+            * normalized
+            * s.direction as f64;
         delta += contribution;
         decomposition.push(NewsDecompositionEntry {
             signal_id: s.signal_id,
@@ -99,6 +107,7 @@ pub fn nowcast(
             recency_factor: recency,
             magnitude: normalized,
             direction: s.direction,
+            confidence: s.confidence,
             contribution,
         });
     }
@@ -175,6 +184,7 @@ mod tests {
             observed_at: as_of - Duration::days(6),
             magnitude: 400.0,
             direction: 1,
+            confidence: 1.0,
         };
         let nc = nowcast(&ctx(), &[sig.clone()], &w, as_of);
         assert!(nc.nowcast_gap > nc.baseline_gap);
@@ -193,6 +203,7 @@ mod tests {
             observed_at: as_of - Duration::days(days_ago),
             magnitude: 400.0,
             direction: 1,
+            confidence: 1.0,
         };
         let fresh = nowcast(&ctx(), &[mk(1)], &w, as_of);
         let stale = nowcast(&ctx(), &[mk(360)], &w, as_of);

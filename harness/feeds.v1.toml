@@ -1,0 +1,31 @@
+# Local-news feed registry for the agentic extraction harness.
+# Feeds verified live 2026-06-11. The pipeline tolerates dead feeds
+# (per-feed error -> log + continue); adding one is a PR.
+
+[harness]
+max_docs_per_day = 50
+
+[[feed]]
+name = "Gothamist"
+url = "https://gothamist.com/feed"
+region = "NYC"
+
+[[feed]]
+name = "THE CITY"
+url = "https://www.thecity.nyc/feed/"
+region = "NYC"
+
+[[feed]]
+name = "City Limits"
+url = "https://citylimits.org/feed/"
+region = "NYC"
+
+[[feed]]
+name = "Norwood News"
+url = "https://norwoodnews.org/feed/"
+region = "Bronx"
+
+[[feed]]
+name = "Hudson Valley Post"
+url = "https://hudsonvalleypost.com/feed/"
+region = "Westchester/Hudson Valley"

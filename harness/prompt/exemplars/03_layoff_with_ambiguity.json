@@ -1,0 +1,17 @@
+{
+  "document": "A major employer in the borough may be scaling back. Workers at the Hunts Point distribution facility told reporters that management has discussed 'restructuring' that could affect as many as 150 jobs, though the company declined to confirm any layoff plans. Union representatives said they had not received formal notice. The facility employs about 900 people in the South Bronx.",
+  "expected": {
+    "signals": [
+      {
+        "signal_type": "layoff_warn",
+        "direction": 1,
+        "magnitude": 150,
+        "raw_excerpt": "management has discussed 'restructuring' that could affect as many as 150 jobs, though the company declined to confirm any layoff plans",
+        "geo_text": "South Bronx",
+        "observed_date_text": null,
+        "confidence": 0.4
+      }
+    ]
+  },
+  "why": "Quantified but unconfirmed and second-hand: emit with LOW confidence (0.4), not silence — discarding hedged signals is its own bias; the fusion layer down-weights them. The hedging language stays inside the excerpt so reviewers see it."
+}

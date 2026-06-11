@@ -113,8 +113,15 @@ pub struct NewsDecompositionEntry {
     pub recency_factor: f64,
     pub magnitude: f64,
     pub direction: i16,
-    /// weight · discount · recency · magnitude · direction (after apportionment)
+    /// Extraction confidence for agentic signals; 1.0 for structured sources.
+    #[serde(default = "default_confidence")]
+    pub confidence: f64,
+    /// weight · discount · recency · confidence · magnitude · direction (after apportionment)
     pub contribution: f64,
+}
+
+fn default_confidence() -> f64 {
+    1.0
 }
 
 /// Fast clock. A nowcast of where need appears to be moving — a signal, not proof.

@@ -1,0 +1,17 @@
+{
+  "document": "MOUNT VERNON — St. Anne's Community Food Pantry, which has served the city's south side for two decades, announced Tuesday it will cut its distribution schedule from five days a week to two, citing a 40 percent drop in donations since the spring. 'We simply cannot keep the shelves stocked,' director Maria Torres said. The pantry serves roughly 600 families a month. City officials said they were exploring emergency funding options but offered no timeline.",
+  "expected": {
+    "signals": [
+      {
+        "signal_type": "pantry_capacity",
+        "direction": -1,
+        "magnitude": 3,
+        "raw_excerpt": "it will cut its distribution schedule from five days a week to two, citing a 40 percent drop in donations since the spring",
+        "geo_text": "Mount Vernon",
+        "observed_date_text": "Tuesday",
+        "confidence": 0.9
+      }
+    ]
+  },
+  "why": "Capacity fell by a stated, countable amount (5 days to 2 = magnitude 3 days). Verbatim span justifies it alone. Direction -1: supply falling. The donation drop is context inside the same span, not a second signal."
+}

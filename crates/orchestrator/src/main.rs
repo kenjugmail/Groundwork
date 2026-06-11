@@ -2,6 +2,7 @@
 //! records every fetch, runs drift gates, writes signals transactionally,
 //! and recomputes the nowcast after ingests.
 
+mod agentic;
 mod alerts;
 mod baselines;
 mod fetcher;
@@ -101,6 +102,19 @@ async fn main() -> anyhow::Result<()> {
                     let n = baselines::ingest_chr(&db, &fetcher).await?;
                     println!("chr: upserted {n} baseline values across US counties + states");
                 }
+                "local-news" => {
+                    let model = harness::anthropic::AnthropicModel::from_env()?;
+                    let raw = FsRawStore::new(
+                        std::env::var("RAW_STORE_DIR").unwrap_or_else(|_| "./raw_store".into()),
+                    );
+                    let out = agentic::ingest_local_news(&db, &fetcher, &raw, &model).await?;
+                    println!(
+                        "local_news: {} signals inserted{} — {}",
+                        out.inserted,
+                        if out.quarantined { " [QUARANTINED]" } else { "" },
+                        out.detail
+                    );
+                }
                 "meal-gap" => {
                     let f = file.ok_or_else(|| {
                         anyhow::anyhow!("meal-gap needs --file <csv> (manual annual drop)")
@@ -153,6 +167,37 @@ async fn run_loop(db: &Db, _f: &RecordingFetcher<FsRawStore>) -> anyhow::Result<
                     match baselines::ingest_chr(&db, &fetcher).await {
                         Ok(n) => tracing::info!(upserted = n, "chr baseline refresh complete"),
                         Err(e) => tracing::error!("chr refresh failed: {e:#}"),
+                    }
+                    tokio::time::sleep(cadence).await;
+                }
+            }));
+            continue;
+        }
+        // Agentic local-news loop (only when an API key is configured).
+        if src.id == "local_news" {
+            let Ok(model) = harness::anthropic::AnthropicModel::from_env() else {
+                tracing::warn!("local_news enabled but ANTHROPIC_API_KEY missing; skipping");
+                continue;
+            };
+            let cadence = std::time::Duration::from_secs(src.cadence_seconds.max(60) as u64);
+            let db = Db::connect(&database_url).await?;
+            let fetcher = RecordingFetcher::new(FsRawStore::new(&raw_dir));
+            let raw = FsRawStore::new(&raw_dir);
+            handles.push(tokio::spawn(async move {
+                loop {
+                    match agentic::ingest_local_news(&db, &fetcher, &raw, &model).await {
+                        Ok(out) => {
+                            tracing::info!(
+                                inserted = out.inserted,
+                                quarantined = out.quarantined,
+                                detail = %out.detail,
+                                "local_news cycle complete"
+                            );
+                            if let Err(e) = nowcast::recompute(&db).await {
+                                tracing::error!("nowcast recompute failed: {e:#}");
+                            }
+                        }
+                        Err(e) => tracing::error!("local_news ingest failed: {e:#}"),
                     }
                     tokio::time::sleep(cadence).await;
                 }

@@ -31,6 +31,13 @@ async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt().init();
     let cli = Cli::parse();
 
+    // Agentic source: replay stored extractions (deterministic, free) —
+    // re-runs the verbatim-span guard + geo-resolution over the saved model
+    // outputs against the saved article captures.
+    if cli.source == "local_news" {
+        return replay_local_news(&cli.captures).await;
+    }
+
     let adapter: Box<dyn SourceAdapter> = match cli.source.as_str() {
         "warn_ny" => Box::new(adapters::warn_ny::WarnNyAdapter),
         "household_pulse" => Box::new(adapters::household_pulse::HouseholdPulseAdapter::default()),
@@ -98,6 +105,54 @@ async fn main() -> anyhow::Result<()> {
         metas.len() - failures
     );
     if failures > 0 {
+        std::process::exit(2);
+    }
+    Ok(())
+}
+
+/// Re-validate every stored extraction: schema, verbatim span against the
+/// matching article capture, geo-resolution. Catches regressions in the
+/// guard/resolver logic without paying for model calls.
+async fn replay_local_news(captures_dir: &str) -> anyhow::Result<()> {
+    let raw = FsRawStore::new(captures_dir);
+    let extractions = raw.list("local_news_extractions").await?;
+    if extractions.is_empty() {
+        anyhow::bail!("no stored extractions under {captures_dir}");
+    }
+    let articles = raw.list("local_news").await?;
+    let mut ok = 0usize;
+    let mut problems = 0usize;
+    for meta in &extractions {
+        let extraction = raw.get(&meta.capture_id).await?;
+        let parsed: Result<harness::ExtractedSignals, _> =
+            serde_json::from_slice(&extraction.bytes);
+        let Ok(parsed) = parsed else {
+            println!("DRIFT {}  stored output no longer parses", meta.capture_id);
+            problems += 1;
+            continue;
+        };
+        // Find the article capture for the same URL.
+        let Some(article_meta) = articles.iter().rev().find(|a| a.url == meta.url) else {
+            println!("MISS {}  no article capture for {}", meta.capture_id, meta.url);
+            problems += 1;
+            continue;
+        };
+        let article = raw.get(&article_meta.capture_id).await?;
+        let text = harness::rss::article_text(&article.bytes);
+        for sig in &parsed.signals {
+            if !harness::verify::excerpt_in_document(&sig.raw_excerpt, &text) {
+                println!("SPAN {}  excerpt no longer verifies", meta.capture_id);
+                problems += 1;
+            } else if harness::geo_places::resolve(&sig.geo_text).is_none() {
+                println!("GEO  {}  '{}' no longer resolves", meta.capture_id, sig.geo_text);
+                problems += 1;
+            } else {
+                ok += 1;
+            }
+        }
+    }
+    println!("replayed {} extractions: {ok} signals verified, {problems} problems", extractions.len());
+    if problems > 0 {
         std::process::exit(2);
     }
     Ok(())

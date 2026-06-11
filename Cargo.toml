@@ -5,6 +5,7 @@ members = [
     "crates/store",
     "crates/adapters",
     "crates/fusion",
+    "crates/harness",
     "crates/orchestrator",
     "crates/api",
     "crates/replay",

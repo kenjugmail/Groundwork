@@ -217,6 +217,24 @@ impl Db {
         .await?)
     }
 
+    // ---- seen urls (agentic article dedupe) ----
+
+    /// True if the URL was newly recorded (i.e. not seen before).
+    pub async fn mark_url_seen(&self, source_id: &str, url: &str) -> anyhow::Result<bool> {
+        use sha2::Digest;
+        let hash = hex::encode(sha2::Sha256::digest(url.as_bytes()));
+        let res = sqlx::query(
+            "INSERT INTO seen_urls (url_sha256, source_id, url) VALUES ($1,$2,$3)
+             ON CONFLICT (url_sha256) DO NOTHING",
+        )
+        .bind(hash)
+        .bind(source_id)
+        .bind(url)
+        .execute(&self.pool)
+        .await?;
+        Ok(res.rows_affected() > 0)
+    }
+
     // ---- baselines ----
 
     pub async fn upsert_baseline(

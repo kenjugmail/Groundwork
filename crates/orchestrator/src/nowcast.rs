@@ -63,6 +63,9 @@ pub async fn recompute(db: &Db) -> anyhow::Result<usize> {
                 observed_at: s.observed_at,
                 magnitude: share,
                 direction: s.direction,
+                // Agentic signals carry extraction confidence in payload;
+                // structured sources default to 1.0.
+                confidence: s.payload.get("confidence").and_then(|v| v.as_f64()).unwrap_or(1.0),
             });
         }
     }

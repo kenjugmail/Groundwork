@@ -1,0 +1,5 @@
+{
+  "document": "YONKERS — The City Council voted 5-2 on Thursday to approve a new mixed-use development on the former industrial site along the Saw Mill River. The project, which includes 240 market-rate apartments and ground-floor retail, has been debated for three years. Supporters cited the tax base; opponents raised traffic concerns. Construction is expected to begin next fall.",
+  "expected": { "signals": [] },
+  "why": "Development news with no food-security content. A model could speculate about gentrification and food access — that would be inference beyond the text. Empty array is the correct, common output."
+}

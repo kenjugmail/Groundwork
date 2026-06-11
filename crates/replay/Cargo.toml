@@ -8,6 +8,7 @@ license.workspace = true
 groundwork-types = { path = "../groundwork-types" }
 store = { path = "../store" }
 adapters = { path = "../adapters" }
+harness = { path = "../harness" }
 tokio = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }

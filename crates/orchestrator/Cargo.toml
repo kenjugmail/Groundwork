@@ -9,6 +9,9 @@ groundwork-types = { path = "../groundwork-types" }
 store = { path = "../store" }
 adapters = { path = "../adapters" }
 fusion = { path = "../fusion" }
+harness = { path = "../harness" }
+sha2 = { workspace = true }
+hex = { workspace = true }
 tokio = { workspace = true }
 reqwest = { workspace = true }
 serde = { workspace = true }
