@@ -14,7 +14,10 @@ pub const CHR_PROVENANCE: &str = "https://www.countyhealthrankings.org/health-da
 pub const CHR_YEAR: i32 = 2025;
 
 /// (human header, our namespaced metric name, is_fraction)
-pub const MEASURES: [(&str, &str, bool); 6] = [
+pub const MEASURES: [(&str, &str, bool); 7] = [
+    // Population lets the UI turn rates into people (and gap estimates into
+    // dollars) without a second data source.
+    ("Population raw value", "chr_population", false),
     ("Food Insecurity raw value", "chr_food_insecurity_rate", true),
     ("Children in Poverty raw value", "chr_child_poverty_rate", true),
     ("Unemployment raw value", "chr_unemployment_rate", true),

@@ -191,6 +191,33 @@
       "note": "Grassroots advocacy on EITC/CTC and global nutrition — policies with measured poverty effects (the 2021 expanded CTC roughly halved US child poverty while active)."
     },
     {
+      "id": "frac",
+      "org": "Food Research & Action Center",
+      "title": "Push universal school meals and full SNAP participation",
+      "url": "https://frac.org/",
+      "kind": "systemic",
+      "counties": ["US"],
+      "note": "Closing the SNAP and school-meal participation gap reaches millions already eligible — the largest unclaimed anti-hunger resource in the US."
+    },
+    {
+      "id": "evidence_action",
+      "org": "Evidence Action",
+      "title": "Scale interventions proven by randomized trials",
+      "url": "https://www.evidenceaction.org/",
+      "kind": "systemic",
+      "counties": ["*"],
+      "note": "Runs only programs with RCT-grade evidence and publishes its failures; reaches hundreds of millions at single-digit dollars per person."
+    },
+    {
+      "id": "ipa",
+      "org": "Innovations for Poverty Action",
+      "title": "Fund the research that finds what actually ends poverty",
+      "url": "https://poverty-action.org/",
+      "kind": "systemic",
+      "counties": ["*"],
+      "note": "600+ randomized evaluations of poverty programs — the evidence base the other levers stand on."
+    },
+    {
       "id": "givewell",
       "org": "GiveWell",
       "title": "Give where the evidence says it goes furthest",
