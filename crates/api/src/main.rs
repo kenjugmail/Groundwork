@@ -50,6 +50,9 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/impact/*rest", get(impact_stub))
         .nest_service("/", ServeDir::new("ui"))
         .layer(CorsLayer::permissive())
+        // The US and world payloads are MBs of slow-clock data; gzip cuts
+        // them ~5x and clients may cache them for an hour.
+        .layer(tower_http::compression::CompressionLayer::new())
         .with_state(AppState {
             db,
             actions: std::sync::Arc::new(actions),
@@ -265,7 +268,9 @@ async fn us_baseline(State(st): State<AppState>) -> Result<Response, ApiError> {
         })
         .collect();
 
-    Ok(Json(serde_json::json!({
+    Ok((
+        [(axum::http::header::CACHE_CONTROL, "public, max-age=3600")],
+        Json(serde_json::json!({
         "type": "FeatureCollection",
         "clock": "slow",
         "source": "County Health Rankings & Roadmaps (University of Wisconsin Population Health Institute), 2025",
@@ -273,8 +278,9 @@ async fn us_baseline(State(st): State<AppState>) -> Result<Response, ApiError> {
         "note": "Annual county/state baselines across need categories. Not a nowcast — fast-clock sensing exists only where Groundwork has live local sources.",
         "states": states,
         "features": features,
-    }))
-    .into_response())
+        })),
+    )
+        .into_response())
 }
 
 /// Global slow-baseline layer: prevalence of undernourishment by country
@@ -289,7 +295,11 @@ async fn world_baseline(State(st): State<AppState>) -> Result<Response, ApiError
     let mut cache = st.world_cache.lock().await;
     if let Some((at, payload)) = cache.as_ref() {
         if at.elapsed() < TTL {
-            return Ok(Json(payload.clone()).into_response());
+            return Ok((
+                [(axum::http::header::CACHE_CONTROL, "public, max-age=3600")],
+                Json(payload.clone()),
+            )
+                .into_response());
         }
     }
 
@@ -345,6 +355,7 @@ async fn world_baseline(State(st): State<AppState>) -> Result<Response, ApiError
         .collect();
 
     let payload = serde_json::json!({
+        "cache_control_hint": "public, max-age=3600",
         "clock": "slow",
         "metric": "prevalence_of_undernourishment_pct",
         "source": "World Bank (FAO), indicator SN.ITK.DEFC.ZS",
@@ -353,7 +364,11 @@ async fn world_baseline(State(st): State<AppState>) -> Result<Response, ApiError
         "countries": countries,
     });
     *cache = Some((std::time::Instant::now(), payload.clone()));
-    Ok(Json(payload).into_response())
+    Ok((
+        [(axum::http::header::CACHE_CONTROL, "public, max-age=3600")],
+        Json(payload),
+    )
+        .into_response())
 }
 
 #[derive(Deserialize)]

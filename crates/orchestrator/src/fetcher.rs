@@ -16,7 +16,7 @@ pub struct RecordingFetcher<S: RawDocStore> {
 impl<S: RawDocStore> RecordingFetcher<S> {
     pub fn new(store: S) -> Self {
         let client = reqwest::Client::builder()
-            .user_agent("groundwork/0.1 (+https://github.com/ephemerent/groundwork)")
+            .user_agent("groundwork/0.1 (+https://github.com/kenjugmail/Groundwork)")
             .timeout(std::time::Duration::from_secs(60))
             .build()
             .expect("reqwest client");

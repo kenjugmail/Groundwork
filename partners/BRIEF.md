@@ -43,4 +43,4 @@ all model weights are versioned in public; coverage gaps are displayed, never
 hidden; gameable sources are explicitly down-weighted. The system is built so
 that being wrong is visible.
 
-**Repo:** github.com/ephemerent/groundwork (or current home) · **Demo:** see DEMO_SCRIPT.md
+**Repo:** github.com/kenjugmail/Groundwork · **Demo:** see DEMO_SCRIPT.md

@@ -39,6 +39,26 @@ const GOAL = {
 
 let state = { loc: 'all', view: 'dots', metric: 'chr_food_insecurity_rate', nowcastFC: null, worldData: null, usData: null };
 
+// Permalinks: #loc=48&metric=chr_child_poverty_rate restores a view, so a
+// specific state/metric can be shared in one URL.
+function readHash() {
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (p.get('loc')) state.loc = p.get('loc');
+  if (p.get('metric') && METRICS[p.get('metric')]) state.metric = p.get('metric');
+}
+function writeHash() {
+  const p = new URLSearchParams();
+  if (state.loc !== 'all') p.set('loc', state.loc);
+  if (state.metric !== 'chr_food_insecurity_rate') p.set('metric', state.metric);
+  history.replaceState(null, '', p.toString() ? '#' + p.toString() : location.pathname);
+}
+readHash();
+
+const loadingEl = () => document.getElementById('loading');
+function setLoading(msg) {
+  loadingEl().textContent = msg || '';
+}
+
 const STATE_NAMES = {
   AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas', CA: 'California', CO: 'Colorado',
   CT: 'Connecticut', DE: 'Delaware', DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia',
@@ -148,13 +168,16 @@ async function fetchNowcast() {
 }
 async function fetchUs() {
   if (!state.usData) {
+    setLoading('Loading 3,144 US counties…');
     const res = await fetch('/v1/us');
     state.usData = await res.json();
+    setLoading('');
   }
   return state.usData;
 }
 async function fetchWorld() {
   if (!state.worldData) {
+    setLoading('Loading world data…');
     const [wb, geo] = await Promise.all([
       fetch('/v1/world').then((r) => r.json()),
       fetch('data/countries.geo.json').then((r) => r.json()),
@@ -170,6 +193,7 @@ async function fetchWorld() {
     }
     geo.features = geo.features.filter((f) => f.properties.undernourishment_pct !== null);
     state.worldData = { wb, geo };
+    setLoading('');
   }
   return state.worldData;
 }
@@ -320,7 +344,15 @@ function buildControls() {
       ${LOCATIONS.filter((l) => ['us', 'world'].includes(l.id)).map((l) => `<option value="${l.id}">${l.name}</option>`).join('')}
     </optgroup>
     <optgroup label="US states (annual baseline)">${states}</optgroup>`;
-  sel.onchange = () => { state.loc = sel.value; renderAll(); };
+  sel.value = state.loc; // restore permalink
+  sel.onchange = () => { state.loc = sel.value; writeHash(); renderAll(); };
+
+  const toggle = document.getElementById('panelToggle');
+  toggle.onclick = () => {
+    const panel = document.getElementById('panel');
+    panel.classList.toggle('collapsed');
+    toggle.textContent = panel.classList.contains('collapsed') ? '▴' : '▾';
+  };
   const vt = document.getElementById('viewToggle');
   vt.onclick = async () => {
     state.view = state.view === 'dots' ? 'choropleth' : 'dots';
@@ -330,8 +362,10 @@ function buildControls() {
   };
   const ms = document.getElementById('metric');
   ms.innerHTML = Object.entries(METRICS).map(([k, m]) => `<option value="${k}">${m.label}</option>`).join('');
+  ms.value = state.metric; // restore permalink
   ms.onchange = () => {
     state.metric = ms.value;
+    writeHash();
     if (map.getLayer('us-fill')) map.setPaintProperty('us-fill', 'fill-color', usColorExpr(state.metric));
     renderLegend('us');
     if (isStateLoc(state.loc)) renderStateAnalytics(state.loc);

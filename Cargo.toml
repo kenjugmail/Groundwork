@@ -15,7 +15,7 @@ members = [
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
-repository = "https://github.com/ephemerent/groundwork"
+repository = "https://github.com/kenjugmail/Groundwork"
 
 [workspace.dependencies]
 tokio = { version = "1", features = ["full"] }
@@ -41,5 +41,5 @@ hex = "0.4"
 async-trait = "0.1"
 clap = { version = "4", features = ["derive"] }
 dotenvy = "0.15"
-tower-http = { version = "0.6", features = ["fs", "cors"] }
+tower-http = { version = "0.6", features = ["fs", "cors", "compression-gzip", "set-header"] }
 zip = "2"
