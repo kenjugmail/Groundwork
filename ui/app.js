@@ -139,12 +139,15 @@ function wireGoal(container, key, placeName, foodInsecurePeople) {
   };
 }
 
+// eslint-disable-next-line no-undef
 const map = new maplibregl.Map({
   container: 'map',
   style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json', // © CARTO © OpenStreetMap contributors
   center: [-73.85, 40.9],
   zoom: 9,
 });
+map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+map.addControl(new maplibregl.ScaleControl({ unit: 'imperial' }), 'bottom-right');
 
 // If the basemap CDN stalls, fall back to a blank canvas so the data layers
 // (the actual product) still render.

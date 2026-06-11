@@ -1,5 +1,7 @@
 # Multi-stage build: api + orchestrator binaries, slim runtime.
-FROM rust:1.83-slim AS builder
+# rust:1-slim tracks current stable; deps in the tree require edition2024
+# (Cargo >= 1.85), so don't pin below that.
+FROM rust:1-slim AS builder
 RUN apt-get update && apt-get install -y pkg-config libssl-dev && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY Cargo.toml Cargo.lock ./
