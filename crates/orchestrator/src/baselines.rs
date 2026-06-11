@@ -1,7 +1,38 @@
 //! Baseline loaders: ACS (live API) and Map the Meal Gap (manual CSV drop).
 
-use adapters::{acs, meal_gap, Fetcher};
+use adapters::{acs, chr, meal_gap, Fetcher};
 use store::Db;
+
+/// National multi-category baselines from County Health Rankings: food
+/// insecurity, child poverty, unemployment, uninsured, median income —
+/// per county and state. Slow clock, annual, recorded like every fetch.
+pub async fn ingest_chr(db: &Db, fetcher: &dyn Fetcher) -> anyhow::Result<usize> {
+    let capture = chr::fetch(fetcher).await?;
+    let rows = match chr::parse(&capture) {
+        Ok(rows) => rows,
+        Err(e) => {
+            db.mark_source_ingest("chr", true).await?;
+            anyhow::bail!("CHR parse drift (source marked degraded): {e}");
+        }
+    };
+    let mut upserted = 0usize;
+    let mut skipped = 0usize;
+    for r in &rows {
+        if !db.geo_unit_exists(&r.geoid).await? {
+            skipped += 1; // geometry not loaded (run load-us-counties) or territory
+            continue;
+        }
+        for (metric, value) in &r.values {
+            db.upsert_baseline(&r.geoid, metric, chr::CHR_YEAR, *value, "chr").await?;
+            upserted += 1;
+        }
+    }
+    if skipped > 0 {
+        tracing::warn!(skipped, "CHR rows without a matching geo_unit (run load-us-counties first for full coverage)");
+    }
+    db.mark_source_ingest("chr", false).await?;
+    Ok(upserted)
+}
 
 pub async fn ingest_acs(db: &Db, fetcher: &dyn Fetcher) -> anyhow::Result<usize> {
     let api_key = std::env::var("CENSUS_API_KEY").ok().filter(|k| !k.is_empty());

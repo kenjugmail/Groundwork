@@ -34,6 +34,11 @@ enum Command {
         #[arg(long)]
         zip: Option<String>,
     },
+    /// Download cartographic boundaries for all ~3,100 US counties and load geo_units.
+    LoadUsCounties {
+        #[arg(long)]
+        zip: Option<String>,
+    },
     /// Ingest one source now: warn-ny | acs | meal-gap | household-pulse | socrata-snap
     Ingest {
         source: String,
@@ -74,6 +79,10 @@ async fn main() -> anyhow::Result<()> {
             let n = tracts::load_tracts(&db, zip.as_deref()).await?;
             println!("loaded {n} tracts into geo_units");
         }
+        Command::LoadUsCounties { zip } => {
+            let n = tracts::load_us_counties(&db, zip.as_deref()).await?;
+            println!("loaded {n} US counties into geo_units");
+        }
         Command::Ingest { source, file } => {
             match source.as_str() {
                 "warn-ny" => report(ingest::ingest_source(&db, &WarnNyAdapter, &fetcher).await?),
@@ -86,6 +95,10 @@ async fn main() -> anyhow::Result<()> {
                 "acs" => {
                     let n = baselines::ingest_acs(&db, &fetcher).await?;
                     println!("acs: upserted baselines for {n} tracts");
+                }
+                "chr" => {
+                    let n = baselines::ingest_chr(&db, &fetcher).await?;
+                    println!("chr: upserted {n} baseline values across US counties + states");
                 }
                 "meal-gap" => {
                     let f = file.ok_or_else(|| {

@@ -42,6 +42,7 @@ async fn main() -> anyhow::Result<()> {
         .route("/v1/signals/:id", get(signal))
         .route("/v1/actions", get(actions_for))
         .route("/v1/world", get(world_baseline))
+        .route("/v1/us", get(us_baseline))
         .route("/v1/alerts", get(alerts))
         // Slow clock: separate path, separate cadence label, empty in v0.
         .route("/v1/impact", get(impact_stub))
@@ -190,6 +191,91 @@ async fn signal(
     }
 }
 
+/// US-wide slow-baseline layer: county-level multi-category baselines from
+/// County Health Rankings (food insecurity, child poverty, unemployment,
+/// uninsured, median household income). SLOW clock — annual data with
+/// provenance, never a nowcast. Tract-level nowcasting exists only inside
+/// the sensing metro (NYC + Westchester).
+async fn us_baseline(State(st): State<AppState>) -> Result<Response, ApiError> {
+    let county_rows = sqlx::query(
+        r#"SELECT g.id, g.name, g.state_fips,
+                  ST_AsGeoJSON(g.geom, 5)::text AS geometry,
+                  COALESCE((
+                      SELECT jsonb_object_agg(b.metric, b.value)
+                      FROM (
+                          SELECT DISTINCT ON (metric) metric, value
+                          FROM baselines
+                          WHERE geo_unit_id = g.id AND metric LIKE 'chr\_%'
+                          ORDER BY metric, year DESC
+                      ) b
+                  ), '{}'::jsonb)::text AS metrics
+           FROM geo_units g
+           WHERE g.kind = 'county' AND g.geom IS NOT NULL
+             AND EXISTS (SELECT 1 FROM baselines b2
+                         WHERE b2.geo_unit_id = g.id AND b2.metric LIKE 'chr\_%')"#,
+    )
+    .fetch_all(&st.db.pool)
+    .await?;
+
+    let state_rows = sqlx::query(
+        r#"SELECT g.id, g.name,
+                  COALESCE((
+                      SELECT jsonb_object_agg(b.metric, b.value)
+                      FROM (
+                          SELECT DISTINCT ON (metric) metric, value
+                          FROM baselines
+                          WHERE geo_unit_id = g.id AND metric LIKE 'chr\_%'
+                          ORDER BY metric, year DESC
+                      ) b
+                  ), '{}'::jsonb)::text AS metrics
+           FROM geo_units g
+           WHERE g.kind = 'state'
+             AND EXISTS (SELECT 1 FROM baselines b2
+                         WHERE b2.geo_unit_id = g.id AND b2.metric LIKE 'chr\_%')"#,
+    )
+    .fetch_all(&st.db.pool)
+    .await?;
+
+    let features: Vec<serde_json::Value> = county_rows
+        .iter()
+        .map(|r| {
+            let metrics: serde_json::Value =
+                serde_json::from_str(&r.get::<String, _>("metrics")).unwrap_or_default();
+            serde_json::json!({
+                "type": "Feature",
+                "geometry": serde_json::from_str::<serde_json::Value>(&r.get::<String, _>("geometry")).unwrap_or(serde_json::Value::Null),
+                "properties": {
+                    "geo_unit_id": r.get::<String, _>("id"),
+                    "name": r.get::<String, _>("name"),
+                    "state_fips": r.get::<String, _>("state_fips"),
+                    "metrics": metrics,
+                }
+            })
+        })
+        .collect();
+    let states: Vec<serde_json::Value> = state_rows
+        .iter()
+        .map(|r| {
+            serde_json::json!({
+                "geo_unit_id": r.get::<String, _>("id"),
+                "name": r.get::<String, _>("name"),
+                "metrics": serde_json::from_str::<serde_json::Value>(&r.get::<String, _>("metrics")).unwrap_or_default(),
+            })
+        })
+        .collect();
+
+    Ok(Json(serde_json::json!({
+        "type": "FeatureCollection",
+        "clock": "slow",
+        "source": "County Health Rankings & Roadmaps (University of Wisconsin Population Health Institute), 2025",
+        "provenance_url": "https://www.countyhealthrankings.org/health-data",
+        "note": "Annual county/state baselines across need categories. Not a nowcast — fast-clock sensing exists only where Groundwork has live local sources.",
+        "states": states,
+        "features": features,
+    }))
+    .into_response())
+}
+
 /// Global slow-baseline layer: prevalence of undernourishment by country
 /// (World Bank SN.ITK.DEFC.ZS, sourced from FAO). This is the SLOW clock at
 /// world scale — an annual baseline with full provenance, never a nowcast.
@@ -282,11 +368,12 @@ async fn actions_for(
     State(st): State<AppState>,
     Query(q): Query<ActionsQuery>,
 ) -> impl IntoResponse {
-    // geo_unit_id: tract/county GEOID, or "world" for the global view.
-    // Resources with counties ["*"] are global and match everywhere; "world"
-    // matches only globals.
+    // geo_unit_id: tract/county GEOID, "us" for the national view, or "world"
+    // for the global view. Resource scope tokens: explicit county GEOIDs,
+    // "US" (any US geography), "*" (everywhere).
     let county: Option<String> = q.geo_unit_id.as_ref().map(|g| {
-        if g == "world" { g.clone() } else if g.len() >= 5 { g[..5].to_string() } else { g.clone() }
+        let g = g.to_lowercase();
+        if g == "world" || g == "us" { g } else if g.len() >= 5 { g[..5].to_string() } else { g }
     });
     let all = st.actions.get("resources").and_then(|r| r.as_array()).cloned().unwrap_or_default();
     let filtered: Vec<serde_json::Value> = match &county {
@@ -297,8 +384,11 @@ async fn actions_for(
                 r.get("counties")
                     .and_then(|cs| cs.as_array())
                     .map(|cs| {
-                        cs.iter().any(|x| {
-                            x.as_str() == Some("*") || (c != "world" && x.as_str() == Some(c))
+                        cs.iter().any(|x| match x.as_str() {
+                            Some("*") => true,
+                            Some("US") => c != "world", // any US geography incl. "us"
+                            Some(other) => c != "world" && c != "us" && other == c,
+                            None => false,
                         })
                     })
                     .unwrap_or(false)

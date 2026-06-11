@@ -10,11 +10,21 @@ const LOCATIONS = [
   { id: '36081', name: 'Queens',         bbox: [-73.96, 40.54, -73.70, 40.81] },
   { id: '36085', name: 'Staten Island',  bbox: [-74.26, 40.49, -74.05, 40.65] },
   { id: '36119', name: 'Westchester',    bbox: [-73.99, 40.87, -73.48, 41.37] },
+  { id: 'us',    name: '🇺🇸 United States (counties, annual baseline)', bbox: [-125, 24, -66, 50] },
   { id: 'world', name: '🌍 World (annual baseline)', bbox: [-160, -55, 170, 72] },
 ];
+
+// US county metrics (County Health Rankings). Color stops are in metric units.
+const METRICS = {
+  chr_food_insecurity_rate:     { label: 'Food insecurity',        fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.05, '#2c7fb8', 0.12, '#fdae61', 0.20, '#e31a1c', 0.30, '#7f0000'], higherWorse: true },
+  chr_child_poverty_rate:       { label: 'Children in poverty',    fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.05, '#2c7fb8', 0.15, '#fdae61', 0.30, '#e31a1c', 0.45, '#7f0000'], higherWorse: true },
+  chr_unemployment_rate:        { label: 'Unemployment',           fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.02, '#2c7fb8', 0.05, '#fdae61', 0.08, '#e31a1c', 0.12, '#7f0000'], higherWorse: true },
+  chr_uninsured_rate:           { label: 'Uninsured',              fmt: (v) => (100 * v).toFixed(1) + '%', stops: [0.05, '#2c7fb8', 0.12, '#fdae61', 0.20, '#e31a1c', 0.30, '#7f0000'], higherWorse: true },
+  chr_median_household_income:  { label: 'Median household income', fmt: (v) => '$' + Math.round(v).toLocaleString(), stops: [45000, '#7f0000', 60000, '#e31a1c', 80000, '#fdae61', 110000, '#2c7fb8'], higherWorse: false },
+};
 const ELEVATED_PP = 0.002; // delta above baseline (in rate points) we call "elevated"
 
-let state = { loc: 'all', view: 'dots', nowcastFC: null, worldData: null, countriesGeo: null };
+let state = { loc: 'all', view: 'dots', metric: 'chr_food_insecurity_rate', nowcastFC: null, worldData: null, usData: null };
 
 const map = new maplibregl.Map({
   container: 'map',
@@ -42,6 +52,13 @@ async function fetchNowcast() {
     state.nowcastFC = await res.json();
   }
   return state.nowcastFC;
+}
+async function fetchUs() {
+  if (!state.usData) {
+    const res = await fetch('/v1/us');
+    state.usData = await res.json();
+  }
+  return state.usData;
 }
 async function fetchWorld() {
   if (!state.worldData) {
@@ -148,6 +165,32 @@ async function ensureChoropleth() {
   hoverCursor('nowcast-fill');
 }
 
+function usColorExpr(metric) {
+  const m = METRICS[metric];
+  const expr = ['interpolate', ['linear'], ['get', metric, ['get', 'metrics']]];
+  for (let i = 0; i < m.stops.length; i += 2) expr.push(m.stops[i], m.stops[i + 1]);
+  return expr;
+}
+
+async function ensureUsLayer() {
+  if (map.getSource('us')) return;
+  const us = await fetchUs();
+  map.addSource('us', { type: 'geojson', data: us });
+  map.addLayer({
+    id: 'us-fill',
+    type: 'fill',
+    source: 'us',
+    layout: { visibility: 'none' },
+    paint: {
+      'fill-color': usColorExpr(state.metric),
+      'fill-opacity': 0.7,
+      'fill-outline-color': '#ffffff',
+    },
+  });
+  map.on('click', 'us-fill', (e) => showUsCounty(e.features[0].properties));
+  hoverCursor('us-fill');
+}
+
 async function ensureWorldLayer() {
   if (map.getSource('world')) return;
   const { geo } = await fetchWorld();
@@ -180,15 +223,28 @@ function buildControls() {
     if (state.view === 'choropleth') await ensureChoropleth();
     applyVisibility();
   };
+  const ms = document.getElementById('metric');
+  ms.innerHTML = Object.entries(METRICS).map(([k, m]) => `<option value="${k}">${m.label}</option>`).join('');
+  ms.onchange = () => {
+    state.metric = ms.value;
+    if (map.getLayer('us-fill')) map.setPaintProperty('us-fill', 'fill-color', usColorExpr(state.metric));
+    renderLegend('us');
+    renderUsAnalytics();
+  };
 }
 
 async function applyVisibility() {
   const world = state.loc === 'world';
+  const us = state.loc === 'us';
   if (world) await ensureWorldLayer();
+  if (us) await ensureUsLayer();
   const setVis = (id, on) => map.getLayer(id) && map.setLayoutProperty(id, 'visibility', on ? 'visible' : 'none');
   setVis('world-fill', world);
-  setVis('nowcast-dots', !world && state.view === 'dots');
-  setVis('nowcast-fill', !world && state.view === 'choropleth');
+  setVis('us-fill', us);
+  setVis('nowcast-dots', !world && !us && state.view === 'dots');
+  setVis('nowcast-fill', !world && !us && state.view === 'choropleth');
+  document.getElementById('metric').style.display = us ? '' : 'none';
+  document.getElementById('viewToggle').style.display = world || us ? 'none' : '';
 }
 
 async function renderAll() {
@@ -197,13 +253,19 @@ async function renderAll() {
   await applyVisibility();
   document.getElementById('detail').innerHTML = '';
   if (state.loc === 'world') {
-    renderLegend(true);
+    renderLegend('world');
     document.getElementById('modeNote').textContent =
       'World view is the SLOW clock only: annual FAO/World Bank undernourishment, country resolution. No nowcast — Groundwork has no real-time sources at world scale and does not pretend to.';
     await renderWorldAnalytics();
     renderActions('world', 'World');
+  } else if (state.loc === 'us') {
+    renderLegend('us');
+    document.getElementById('modeNote').textContent =
+      'US view is the SLOW clock: annual County Health Rankings baselines across need categories, county resolution. Tract-level nowcasting runs only inside the sensing metro (NYC + Westchester).';
+    await renderUsAnalytics();
+    renderActions('us', 'United States');
   } else {
-    renderLegend(false);
+    renderLegend('local');
     document.getElementById('modeNote').textContent =
       'Fast clock: tract-level nowcast, recomputed as signals arrive. A nowcast is a signal, not proof. Faded = low coverage, never low need.';
     await renderLocalAnalytics();
@@ -211,10 +273,19 @@ async function renderAll() {
   }
 }
 
-function renderLegend(world) {
-  document.getElementById('legend').innerHTML = world
-    ? `<span style="background:#2c7fb8"></span>&lt;5% <span style="background:#fdae61"></span>10% <span style="background:#e31a1c"></span>25% <span style="background:#7f0000"></span>50%+ undernourished <span class="worldtag">annual baseline</span>`
-    : `<span style="background:#2c7fb8"></span>at baseline <span style="background:#fd8d3c"></span>elevated <span style="background:#e31a1c"></span>widening`;
+function renderLegend(mode) {
+  const el = document.getElementById('legend');
+  if (mode === 'world') {
+    el.innerHTML = `<span style="background:#2c7fb8"></span>&lt;5% <span style="background:#fdae61"></span>10% <span style="background:#e31a1c"></span>25% <span style="background:#7f0000"></span>50%+ undernourished <span class="worldtag">annual baseline</span>`;
+  } else if (mode === 'us') {
+    const m = METRICS[state.metric];
+    const chips = [];
+    for (let i = 0; i < m.stops.length; i += 2)
+      chips.push(`<span style="background:${m.stops[i + 1]}"></span>${m.fmt(m.stops[i])}`);
+    el.innerHTML = `${chips.join(' ')} — ${m.label} <span class="worldtag">annual baseline</span>`;
+  } else {
+    el.innerHTML = `<span style="background:#2c7fb8"></span>at baseline <span style="background:#fd8d3c"></span>elevated <span style="background:#e31a1c"></span>widening`;
+  }
 }
 
 // ---------- analytics ----------
@@ -288,6 +359,95 @@ async function renderLocalAnalytics() {
       showTract(flatProps(p));
     };
   });
+}
+
+async function renderUsAnalytics() {
+  if (state.loc !== 'us') return;
+  const us = await fetchUs();
+  const m = METRICS[state.metric];
+  const el = document.getElementById('analytics');
+  const counties = us.features
+    .map((f) => ({ ...f.properties, v: f.properties.metrics[state.metric] }))
+    .filter((c) => typeof c.v === 'number');
+  const states = us.states
+    .map((s) => ({ ...s, v: s.metrics[state.metric] }))
+    .filter((s) => typeof s.v === 'number');
+  const worst = (a, b) => (m.higherWorse ? b.v - a.v : a.v - b.v);
+  const topCounties = [...counties].sort(worst).slice(0, 10);
+  const topStates = [...states].sort(worst).slice(0, 8);
+  const mean = counties.reduce((s, c) => s + c.v, 0) / counties.length;
+  const maxBar = Math.abs(topCounties[0].v) || 1;
+
+  // 6-bin histogram over county values.
+  const vals = counties.map((c) => c.v);
+  const lo = Math.min(...vals), hi = Math.max(...vals);
+  const bins = new Array(6).fill(0);
+  for (const v of vals) bins[Math.min(5, Math.floor(((v - lo) / (hi - lo || 1)) * 5.999))]++;
+  const bmax = Math.max(...bins, 1);
+
+  el.innerHTML = `
+    <h2>Analysis — United States <span class="worldtag">slow clock</span></h2>
+    <div class="statgrid">
+      <div class="stat"><div class="v">${counties.length}</div><div class="l">counties with data</div></div>
+      <div class="stat"><div class="v">${m.fmt(mean)}</div><div class="l">county mean — ${m.label.toLowerCase()}</div></div>
+      <div class="stat"><div class="v">${m.fmt(topCounties[0].v)}</div><div class="l">${m.higherWorse ? 'highest' : 'lowest'} (${topCounties[0].name})</div></div>
+    </div>
+    <div class="chart"><div class="t">Highest-need states (${m.higherWorse ? 'highest' : 'lowest'} ${m.label.toLowerCase()})</div>
+      ${topStates.map((s) => `
+        <div class="bar-row"><span class="lbl plain">${s.name}</span>
+          <div class="bar b2" style="width:${(140 * Math.abs(s.v)) / Math.abs(topStates[0].v || 1)}px"></div>
+          <span class="val">${m.fmt(s.v)}</span></div>`).join('')}
+    </div>
+    <div class="chart"><div class="t">Highest-need counties — ${m.higherWorse ? 'highest' : 'lowest'} ${m.label.toLowerCase()} (click to inspect)</div>
+      ${topCounties.map((c) => `
+        <div class="bar-row"><span class="lbl" data-geo="${c.geo_unit_id}">${c.name}</span>
+          <div class="bar" style="width:${(140 * Math.abs(c.v)) / maxBar}px"></div>
+          <span class="val">${m.fmt(c.v)}</span></div>`).join('')}
+    </div>
+    <div class="chart"><div class="t">Distribution across ${counties.length} counties</div>
+      ${bins.map((b, i) => `
+        <div class="bar-row"><span class="lbl plain">${m.fmt(lo + ((hi - lo) * i) / 6)}–${m.fmt(lo + ((hi - lo) * (i + 1)) / 6)}</span>
+          <div class="bar b2" style="width:${(140 * b) / bmax}px"></div><span class="val">${b}</span></div>`).join('')}
+    </div>
+    <div class="disclaimer">Source: ${us.source} (<a href="${us.provenance_url}" target="_blank">provenance</a>). State bars are CHR state values; county mean is unweighted.</div>`;
+
+  el.querySelectorAll('.lbl[data-geo]').forEach((n) => {
+    n.onclick = () => {
+      const f = us.features.find((x) => x.properties.geo_unit_id === n.dataset.geo);
+      if (f) {
+        showUsCounty(f.properties);
+        const c = centroidOf(f.geometry);
+        if (c) map.flyTo({ center: c, zoom: 7 });
+      }
+    };
+  });
+}
+
+function centroidOf(geom) {
+  // crude bbox center — fine for fly-to
+  let xs = [], ys = [];
+  const walk = (c) => (typeof c[0] === 'number' ? (xs.push(c[0]), ys.push(c[1])) : c.forEach(walk));
+  walk(geom.coordinates);
+  if (!xs.length) return null;
+  return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2];
+}
+
+function showUsCounty(p) {
+  const metrics = typeof p.metrics === 'string' ? JSON.parse(p.metrics) : p.metrics;
+  const cards = Object.entries(METRICS)
+    .filter(([k]) => typeof metrics[k] === 'number')
+    .map(([k, m]) => `<div class="stat"><div class="v">${m.fmt(metrics[k])}</div><div class="l">${m.label}</div></div>`)
+    .join('');
+  document.getElementById('detail').innerHTML = `
+    <h2>${p.name} <span class="worldtag">annual baseline</span></h2>
+    <div class="statgrid">${cards}</div>
+    <div class="sig">County Health Rankings & Roadmaps 2025 (University of Wisconsin Population Health
+      Institute), compiled from federal sources (ACS, BLS LAUS, Feeding America, SAIPE).
+      <br/><a href="https://www.countyhealthrankings.org/health-data" target="_blank">full measures + methodology →</a></div>
+    <div class="guidance"><b>Acting on this:</b> these are annual baselines — where need is persistently
+      concentrated, not what changed this week. The get-help links below route to services in any US county;
+      Feeding America's locator finds the food bank serving this one.</div>`;
+  renderActions(p.geo_unit_id, p.name);
 }
 
 async function renderWorldAnalytics() {

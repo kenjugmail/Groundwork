@@ -5,6 +5,7 @@
 //! parsing, and whose replay implementation serves historical captures.
 
 pub mod acs;
+pub mod chr;
 pub mod geo;
 pub mod household_pulse;
 pub mod meal_gap;

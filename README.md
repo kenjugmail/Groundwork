@@ -44,11 +44,13 @@ cargo build --workspace
 
 # 3. Load census tract geometries (downloads TIGER/Line for NY)
 cargo run -p orchestrator -- load-tracts
+cargo run -p orchestrator -- load-us-counties   # national county boundaries (US view)
 
 # 4. Ingest sources
 cargo run -p orchestrator -- ingest warn-ny      # NY DOL WARN layoff notices
 cargo run -p orchestrator -- ingest acs          # ACS poverty/SNAP baseline
 cargo run -p orchestrator -- ingest meal-gap --file fixtures/mmg_sample.csv
+cargo run -p orchestrator -- ingest chr          # national multi-category baselines
 cargo run -p orchestrator -- nowcast             # recompute nowcasts
 
 # 5. Serve API + map
@@ -63,6 +65,7 @@ cargo run -p api
 | `GET /v1/nowcast?bbox=minx,miny,maxx,maxy&as_of=...` | GeoJSON FeatureCollection: per-tract `nowcast_gap`, `baseline_gap`, `uncertainty`, `coverage_score`, `news_decomposition[]` |
 | `GET /v1/signals/{id}` | Full signal incl. `raw_excerpt` + `provenance_url` |
 | `GET /v1/actions?geo_unit_id=...` | Curated get-help / donate / volunteer links for that place — local and global (no money flows through Groundwork — see [actions/README.md](actions/README.md)) |
+| `GET /v1/us` | US layer: county + state baselines across need categories (food insecurity, child poverty, unemployment, uninsured, median income) from County Health Rankings. **Slow clock only** |
 | `GET /v1/world` | World layer: FAO/World Bank prevalence of undernourishment by country. **Slow clock only** — an annual baseline with provenance, never a nowcast |
 | `GET /v1/alerts?since=...` | Stub in v0 |
 | `GET /v1/impact/...` | Slow-clock impact records (schema only in v0) |

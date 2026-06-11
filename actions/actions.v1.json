@@ -87,6 +87,47 @@
       "counties": ["36005", "36047", "36061", "36081", "36085", "36119"]
     },
     {
+      "id": "feeding_america_locator",
+      "org": "Feeding America",
+      "title": "Find your local food bank",
+      "url": "https://www.feedingamerica.org/find-your-local-foodbank",
+      "kind": "get_help",
+      "counties": ["US"],
+      "note": "Network of 200 food banks covering every US county; also takes donations and volunteers."
+    },
+    {
+      "id": "211_national",
+      "org": "United Way / 211",
+      "title": "Call 2-1-1 anywhere in the US",
+      "url": "https://www.211.org/",
+      "kind": "get_help",
+      "counties": ["US"]
+    },
+    {
+      "id": "findhelp",
+      "org": "findhelp.org",
+      "title": "Search free and reduced-cost local services",
+      "url": "https://www.findhelp.org/",
+      "kind": "get_help",
+      "counties": ["US"]
+    },
+    {
+      "id": "benefits_gov",
+      "org": "US government",
+      "title": "Check benefit eligibility (SNAP, WIC, and more)",
+      "url": "https://www.benefits.gov/",
+      "kind": "get_help",
+      "counties": ["US"]
+    },
+    {
+      "id": "feeding_america_donate",
+      "org": "Feeding America",
+      "title": "Donate to Feeding America",
+      "url": "https://www.feedingamerica.org/",
+      "kind": "donate",
+      "counties": ["US"]
+    },
+    {
       "id": "wfp_donate",
       "org": "UN World Food Programme",
       "title": "Donate to the World Food Programme",
