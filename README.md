@@ -59,6 +59,7 @@ cargo run -p api
 |---|---|
 | `GET /v1/nowcast?bbox=minx,miny,maxx,maxy&as_of=...` | GeoJSON FeatureCollection: per-tract `nowcast_gap`, `baseline_gap`, `uncertainty`, `coverage_score`, `news_decomposition[]` |
 | `GET /v1/signals/{id}` | Full signal incl. `raw_excerpt` + `provenance_url` |
+| `GET /v1/actions?geo_unit_id=...` | Curated get-help / donate / volunteer links for that place (no money flows through Groundwork — see [actions/README.md](actions/README.md)) |
 | `GET /v1/alerts?since=...` | Stub in v0 |
 | `GET /v1/impact/...` | Slow-clock impact records (schema only in v0) |
 
